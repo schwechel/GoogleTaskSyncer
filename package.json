@@ -1,0 +1,19 @@
+{
+  "name": "google-tasks-sync",
+  "version": "1.0.0",
+  "description": "Bidirectional Google Tasks sync between two accounts",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "tsc && node dist/index.js",
+    "dev": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "googleapis": "^131.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3",
+    "ts-node": "^10.9.2"
+  }
+}
