@@ -1,0 +1,48 @@
+name: Sync Google Tasks
+
+on:
+  schedule:
+    # Run every 10 minutes
+    - cron: '*/10 * * * *'
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm install
+    
+    - name: Download previous sync state
+      uses: actions/download-artifact@v4
+      with:
+        name: sync-state
+        path: .
+      continue-on-error: true # First run won't have artifact
+    
+    - name: Run sync
+      env:
+        GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+        GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+        ACCOUNT_A_REFRESH_TOKEN: ${{ secrets.ACCOUNT_A_REFRESH_TOKEN }}
+        ACCOUNT_B_REFRESH_TOKEN: ${{ secrets.ACCOUNT_B_REFRESH_TOKEN }}
+      run: npm start
+    
+    - name: Upload sync state
+      uses: actions/upload-artifact@v4
+      with:
+        name: sync-state
+        path: sync-state.json
+        retention-days: 90
