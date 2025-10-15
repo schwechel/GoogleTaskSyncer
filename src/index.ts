@@ -32,8 +32,8 @@ interface TaskList {
 }
 
 class GoogleTasksSync {
-  private clientA: OAuth2Client;
-  private clientB: OAuth2Client;
+  private clientA!: OAuth2Client;
+  private clientB!: OAuth2Client;
   private tasksApiA: any;
   private tasksApiB: any;
   private syncState: SyncState;
@@ -195,9 +195,6 @@ class GoogleTasksSync {
     const tasksB = await this.getAllTasks(this.tasksApiB, taskListB.id);
 
     console.log(`Found ${tasksA.length} tasks in Account A, ${tasksB.length} tasks in Account B`);
-
-    //Early Exit
-    return;
 
     // Create maps for easier lookup
     const tasksAMap = new Map(tasksA.map(t => [t.id, t]));
