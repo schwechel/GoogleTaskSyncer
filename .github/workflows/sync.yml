@@ -3,7 +3,7 @@ name: Sync Google Tasks
 on:
   schedule:
     # Run every 10 minutes
-    # disable until it works    - cron: '*/10 * * * *'
+    # - cron: '*/10 * * * *'
   workflow_dispatch: # Allows manual triggering
 
 jobs:
@@ -38,6 +38,7 @@ jobs:
         GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
         ACCOUNT_A_REFRESH_TOKEN: ${{ secrets.ACCOUNT_A_REFRESH_TOKEN }}
         ACCOUNT_B_REFRESH_TOKEN: ${{ secrets.ACCOUNT_B_REFRESH_TOKEN }}
+        TASK_LIST_NAME: ${{ secrets.TASK_LIST_NAME }}  # Optional: specify which list to sync
       run: npm start
     
     - name: Upload sync state
