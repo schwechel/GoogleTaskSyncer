@@ -1,7 +1,7 @@
 name: Sync Google Tasks
 
 on:
-  schedule:
+  #schedule:
     # Run every 10 minutes
     # - cron: '*/10 * * * *'
   workflow_dispatch: # Allows manual triggering
