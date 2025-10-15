@@ -143,10 +143,15 @@ class GoogleTasksSync {
     return new Date(taskUpdated) > new Date(lastSynced);
   }
 
+  private async findTaskListByName(tasksApi: any, listName: string): Promise<TaskList | null> {
+    const lists = await this.getTaskLists(tasksApi);
+    return lists.find(list => list.title === listName) || null;
+  }
+
   async syncTaskLists() {
     console.log('Starting sync...');
 
-    // Get task lists from both accounts (using default list for simplicity)
+    // Get task lists from both accounts
     const taskListsA = await this.getTaskLists(this.tasksApiA);
     const taskListsB = await this.getTaskLists(this.tasksApiB);
 
@@ -155,9 +160,33 @@ class GoogleTasksSync {
       return;
     }
 
-    // Use the default task list (first one)
-    const taskListA = taskListsA[0];
-    const taskListB = taskListsB[0];
+    // You can customize which lists to sync here:
+    // Option 1: Use default list (first one)
+    let taskListA = taskListsA[0];
+    let taskListB = taskListsB[0];
+
+    // Option 2: Sync specific lists by name from environment variables
+    const targetListName = process.env.TASK_LIST_NAME;
+    if (targetListName) {
+      const foundListA = await this.findTaskListByName(this.tasksApiA, targetListName);
+      const foundListB = await this.findTaskListByName(this.tasksApiB, targetListName);
+      
+      if (foundListA && foundListB) {
+        taskListA = foundListA;
+        taskListB = foundListB;
+        console.log(`Syncing specific list: "${targetListName}"`);
+      } else {
+        console.log(`Warning: Task list "${targetListName}" not found in both accounts, using default list`);
+      }
+    }
+
+    // Option 3: You can also hardcode specific list names here:
+    // const taskListA = await this.findTaskListByName(this.tasksApiA, 'Work Tasks');
+    // const taskListB = await this.findTaskListByName(this.tasksApiB, 'Work Tasks');
+    // if (!taskListA || !taskListB) {
+    //   console.error('Could not find "Work Tasks" list in both accounts');
+    //   return;
+    // }
 
     console.log(`Syncing: Account A (${taskListA.title}) <-> Account B (${taskListB.title})`);
 
@@ -166,6 +195,9 @@ class GoogleTasksSync {
     const tasksB = await this.getAllTasks(this.tasksApiB, taskListB.id);
 
     console.log(`Found ${tasksA.length} tasks in Account A, ${tasksB.length} tasks in Account B`);
+
+    //Early Exit
+    return;
 
     // Create maps for easier lookup
     const tasksAMap = new Map(tasksA.map(t => [t.id, t]));
