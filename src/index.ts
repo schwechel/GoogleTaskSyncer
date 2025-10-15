@@ -196,6 +196,9 @@ class GoogleTasksSync {
 
     console.log(`Found ${tasksA.length} tasks in Account A, ${tasksB.length} tasks in Account B`);
 
+    // Early return for testing purposes
+    return;
+
     // Create maps for easier lookup
     const tasksAMap = new Map(tasksA.map(t => [t.id, t]));
     const tasksBMap = new Map(tasksB.map(t => [t.id, t]));
