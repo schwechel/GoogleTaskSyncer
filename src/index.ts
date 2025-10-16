@@ -40,7 +40,7 @@ class GoogleTasksSync {
   private stateFile: string;
 
   constructor() {
-    this.stateFile = path.join(__dirname, 'sync-state.json');
+    this.stateFile = path.join(process.cwd(), 'sync-state.json');
     this.syncState = { tasks: {}, lastSyncTime: new Date(0).toISOString() };
   }
 
