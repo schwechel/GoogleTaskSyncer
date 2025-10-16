@@ -1,7 +1,7 @@
 name: Sync Google Tasks
 
 on:
-  #schedule:
+  # schedule:
     # Run every 10 minutes
     # - cron: '*/10 * * * *'
   workflow_dispatch: # Allows manual triggering
@@ -20,7 +20,6 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-        # cache: 'npm'
     
     - name: Install dependencies
       run: npm install
@@ -31,6 +30,15 @@ jobs:
         name: sync-state
         path: .
       continue-on-error: true # First run won't have artifact
+    
+    - name: Check for existing sync state
+      run: |
+        if [ -f sync-state.json ]; then
+          echo "Found existing sync state"
+          cat sync-state.json
+        else
+          echo "No previous sync state found - starting fresh"
+        fi
     
     - name: Run sync
       env:
