@@ -1,10 +1,13 @@
 name: Sync Google Tasks
 
 on:
-  # schedule:
+  #schedule:
     # Run every 10 minutes
     # - cron: '*/10 * * * *'
   workflow_dispatch: # Allows manual triggering
+
+permissions:
+  contents: write  # Needed to commit and push changes
 
 jobs:
   sync:
@@ -31,18 +34,10 @@ jobs:
     - name: Install dependencies
       run: npm install
     
-    - name: Download previous sync state
-      uses: actions/download-artifact@v4
-      with:
-        name: sync-state
-        path: .
-      continue-on-error: true # First run won't have artifact
-    
     - name: Check for existing sync state
       run: |
         if [ -f sync-state.json ]; then
           echo "Found existing sync state"
-          cat sync-state.json
         else
           echo "No previous sync state found - starting fresh"
         fi
@@ -56,9 +51,10 @@ jobs:
         TASK_LIST_NAME: ${{ secrets.TASK_LIST_NAME }}  # Optional: specify which list to sync
       run: npm start
     
-    - name: Upload sync state
-      uses: actions/upload-artifact@v4
-      with:
-        name: sync-state
-        path: sync-state.json
-        retention-days: 90
+    - name: Commit and push sync state
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add sync-state.json
+        git diff --staged --quiet || git commit -m "Update sync state [skip ci]"
+        git push
