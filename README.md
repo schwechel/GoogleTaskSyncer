@@ -113,9 +113,10 @@ your-repo/
 ```
 node_modules/
 dist/
-sync-state.json
 .env
 ```
+
+Note: We intentionally don't ignore `sync-state.json` because the workflow commits it to track sync progress.
 
 ## Step 5: Add Secrets to GitHub
 
