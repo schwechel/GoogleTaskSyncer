@@ -101,6 +101,7 @@ class GoogleTasksSync {
       tasklist: taskListId,
       showCompleted: true,
       showHidden: true,
+      maxResults: 5
     });
     return response.data.items || [];
   }
@@ -197,7 +198,7 @@ class GoogleTasksSync {
     console.log(`Found ${tasksA.length} tasks in Account A, ${tasksB.length} tasks in Account B`);
 
     // Early return for testing purposes
-    return;
+    // return;
 
     // Create maps for easier lookup
     const tasksAMap = new Map(tasksA.map(t => [t.id, t]));
