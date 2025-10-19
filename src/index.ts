@@ -101,6 +101,7 @@ class GoogleTasksSync {
       tasklist: taskListId,
       showCompleted: true,
       showHidden: true,
+      maxResults: 10
     });
     return response.data.items || [];
   }
