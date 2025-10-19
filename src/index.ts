@@ -101,7 +101,7 @@ class GoogleTasksSync {
     let pageToken: string | undefined = undefined;
 
     do {
-      const response = await tasksApi.tasks.list({
+      const response: any = await tasksApi.tasks.list({
         tasklist: taskListId,
         showCompleted: true,
         showHidden: true,
