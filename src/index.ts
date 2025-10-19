@@ -97,13 +97,26 @@ class GoogleTasksSync {
   }
 
   private async getAllTasks(tasksApi: any, taskListId: string): Promise<Task[]> {
-    const response = await tasksApi.tasks.list({
-      tasklist: taskListId,
-      showCompleted: true,
-      showHidden: true,
-      maxResults: 10
-    });
-    return response.data.items || [];
+    const tasks: Task[] = [];
+    let pageToken: string | undefined = undefined;
+
+    do {
+      const response = await tasksApi.tasks.list({
+        tasklist: taskListId,
+        showCompleted: true,
+        showHidden: true,
+        maxResults: 100,
+        pageToken: pageToken,
+      });
+
+      if (response.data.items) {
+        tasks.push(...response.data.items);
+      }
+
+      pageToken = response.data.nextPageToken;
+    } while (pageToken);
+
+    return tasks;
   }
 
   private async createTask(tasksApi: any, taskListId: string, task: Partial<Task>): Promise<Task> {
