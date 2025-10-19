@@ -105,7 +105,7 @@ class GoogleTasksSync {
         tasklist: taskListId,
         showCompleted: true,
         showHidden: true,
-        maxResults: 2,
+        maxResults: 100,
         pageToken: pageToken,
       });
 
