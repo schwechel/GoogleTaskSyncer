@@ -101,7 +101,7 @@ class GoogleTasksSync {
       tasklist: taskListId,
       showCompleted: true,
       showHidden: true,
-      maxResults: 5
+      maxResults: 10
     });
     return response.data.items || [];
   }
@@ -120,10 +120,14 @@ class GoogleTasksSync {
   }
 
   private async updateTask(tasksApi: any, taskListId: string, taskId: string, task: Partial<Task>): Promise<Task> {
+    if (!taskId) {
+      throw new Error('Cannot update task: taskId is missing');
+    }
     const response = await tasksApi.tasks.update({
       tasklist: taskListId,
       task: taskId,
       requestBody: {
+        id: taskId, // Explicitly include the ID
         title: task.title,
         notes: task.notes,
         status: task.status,
@@ -197,9 +201,6 @@ class GoogleTasksSync {
 
     console.log(`Found ${tasksA.length} tasks in Account A, ${tasksB.length} tasks in Account B`);
 
-    // Early return for testing purposes
-    // return;
-
     // Create maps for easier lookup
     const tasksAMap = new Map(tasksA.map(t => [t.id, t]));
     const tasksBMap = new Map(tasksB.map(t => [t.id, t]));
@@ -230,42 +231,79 @@ class GoogleTasksSync {
             // Conflict: both modified since last sync - use latest timestamp
             if (aUpdated > bUpdated) {
               console.log(`Conflict resolved: A -> B (${taskA.title})`);
-              await this.updateTask(this.tasksApiB, taskListB.id, taskB.id, taskA);
-              syncRecord.lastSyncedUpdate = taskA.updated;
+              try {
+                await this.updateTask(this.tasksApiB, taskListB.id, taskB.id, taskA);
+                syncRecord.lastSyncedUpdate = taskA.updated;
+              } catch (error: any) {
+                console.error(`Failed to update task in B: ${error.message}`);
+                // Remove from sync state if task no longer exists
+                if (error.code === 404 || error.code === 400) {
+                  delete this.syncState.tasks[`${syncRecord.accountAId}-${syncRecord.accountBId}`];
+                }
+              }
             } else {
               console.log(`Conflict resolved: B -> A (${taskB.title})`);
-              await this.updateTask(this.tasksApiA, taskListA.id, taskA.id, taskB);
-              syncRecord.lastSyncedUpdate = taskB.updated;
+              try {
+                await this.updateTask(this.tasksApiA, taskListA.id, taskA.id, taskB);
+                syncRecord.lastSyncedUpdate = taskB.updated;
+              } catch (error: any) {
+                console.error(`Failed to update task in A: ${error.message}`);
+                if (error.code === 404 || error.code === 400) {
+                  delete this.syncState.tasks[`${syncRecord.accountAId}-${syncRecord.accountBId}`];
+                }
+              }
             }
           } else if (aModified) {
             // Only A was modified
             console.log(`Syncing A -> B: ${taskA.title}`);
-            await this.updateTask(this.tasksApiB, taskListB.id, taskB.id, taskA);
-            syncRecord.lastSyncedUpdate = taskA.updated;
+            try {
+              await this.updateTask(this.tasksApiB, taskListB.id, taskB.id, taskA);
+              syncRecord.lastSyncedUpdate = taskA.updated;
+            } catch (error: any) {
+              console.error(`Failed to update task in B: ${error.message}`);
+              if (error.code === 404 || error.code === 400) {
+                delete this.syncState.tasks[`${syncRecord.accountAId}-${syncRecord.accountBId}`];
+              }
+            }
           } else if (bModified) {
             // Only B was modified
             console.log(`Syncing B -> A: ${taskB.title}`);
-            await this.updateTask(this.tasksApiA, taskListA.id, taskA.id, taskB);
-            syncRecord.lastSyncedUpdate = taskB.updated;
+            try {
+              await this.updateTask(this.tasksApiA, taskListA.id, taskA.id, taskB);
+              syncRecord.lastSyncedUpdate = taskB.updated;
+            } catch (error: any) {
+              console.error(`Failed to update task in A: ${error.message}`);
+              if (error.code === 404 || error.code === 400) {
+                delete this.syncState.tasks[`${syncRecord.accountAId}-${syncRecord.accountBId}`];
+              }
+            }
           }
 
           processedPairs.add(`${syncRecord.accountAId}-${syncRecord.accountBId}`);
         } else {
           // Task exists in A and sync record, but not in B - deleted from B
           console.log(`Deleting from A (deleted in B): ${taskA.title}`);
-          await this.deleteTask(this.tasksApiA, taskListA.id, taskA.id);
+          try {
+            await this.deleteTask(this.tasksApiA, taskListA.id, taskA.id);
+          } catch (error: any) {
+            console.error(`Failed to delete task from A: ${error.message}`);
+          }
           delete this.syncState.tasks[`${syncRecord.accountAId}-${syncRecord.accountBId}`];
         }
       } else {
         // New task in A - create in B
         console.log(`New task in A, creating in B: ${taskA.title}`);
-        const newTaskB = await this.createTask(this.tasksApiB, taskListB.id, taskA);
-        this.syncState.tasks[`${taskA.id}-${newTaskB.id}`] = {
-          accountAId: taskA.id,
-          accountBId: newTaskB.id,
-          lastSyncedUpdate: taskA.updated,
-        };
-        processedPairs.add(`${taskA.id}-${newTaskB.id}`);
+        try {
+          const newTaskB = await this.createTask(this.tasksApiB, taskListB.id, taskA);
+          this.syncState.tasks[`${taskA.id}-${newTaskB.id}`] = {
+            accountAId: taskA.id,
+            accountBId: newTaskB.id,
+            lastSyncedUpdate: taskA.updated,
+          };
+          processedPairs.add(`${taskA.id}-${newTaskB.id}`);
+        } catch (error: any) {
+          console.error(`Failed to create task in B: ${error.message}`);
+        }
       }
     }
 
@@ -283,17 +321,25 @@ class GoogleTasksSync {
 
         // Task exists in B and sync record, but not in A - deleted from A
         console.log(`Deleting from B (deleted in A): ${taskB.title}`);
-        await this.deleteTask(this.tasksApiB, taskListB.id, taskB.id);
+        try {
+          await this.deleteTask(this.tasksApiB, taskListB.id, taskB.id);
+        } catch (error: any) {
+          console.error(`Failed to delete task from B: ${error.message}`);
+        }
         delete this.syncState.tasks[pairKey];
       } else {
         // New task in B - create in A
         console.log(`New task in B, creating in A: ${taskB.title}`);
-        const newTaskA = await this.createTask(this.tasksApiA, taskListA.id, taskB);
-        this.syncState.tasks[`${newTaskA.id}-${taskB.id}`] = {
-          accountAId: newTaskA.id,
-          accountBId: taskB.id,
-          lastSyncedUpdate: taskB.updated,
-        };
+        try {
+          const newTaskA = await this.createTask(this.tasksApiA, taskListA.id, taskB);
+          this.syncState.tasks[`${newTaskA.id}-${taskB.id}`] = {
+            accountAId: newTaskA.id,
+            accountBId: taskB.id,
+            lastSyncedUpdate: taskB.updated,
+          };
+        } catch (error: any) {
+          console.error(`Failed to create task in A: ${error.message}`);
+        }
       }
     }
 
