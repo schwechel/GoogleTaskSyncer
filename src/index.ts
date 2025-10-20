@@ -38,10 +38,48 @@ class GoogleTasksSync {
   private tasksApiB: any;
   private syncState: SyncState;
   private stateFile: string;
+  private readonly MAX_RETRIES = 5;
+  private readonly INITIAL_DELAY_MS = 1000;
 
   constructor() {
     this.stateFile = path.join(process.cwd(), 'sync-state.json');
     this.syncState = { tasks: {}, lastSyncTime: new Date(0).toISOString() };
+  }
+
+  private async sleep(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  private async retryWithBackoff<T>(
+    operation: () => Promise<T>,
+    operationName: string,
+    retries: number = this.MAX_RETRIES
+  ): Promise<T> {
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        return await operation();
+      } catch (error: any) {
+        const isRateLimitError = 
+          error.code === 429 || 
+          error.message?.includes('Quota Exceeded') ||
+          error.message?.includes('Rate Limit Exceeded') ||
+          error.message?.includes('rateLimitExceeded');
+
+        if (isRateLimitError && attempt < retries) {
+          const delayMs = this.INITIAL_DELAY_MS * Math.pow(2, attempt);
+          console.log(`Rate limit hit for ${operationName}. Retrying in ${delayMs}ms (attempt ${attempt + 1}/${retries})...`);
+          await this.sleep(delayMs);
+        } else if (attempt < retries && (error.code >= 500 || error.code === 'ECONNRESET')) {
+          // Retry on server errors
+          const delayMs = this.INITIAL_DELAY_MS * Math.pow(2, attempt);
+          console.log(`Server error for ${operationName}. Retrying in ${delayMs}ms (attempt ${attempt + 1}/${retries})...`);
+          await this.sleep(delayMs);
+        } else {
+          throw error;
+        }
+      }
+    }
+    throw new Error(`Failed after ${retries} retries`);
   }
 
   async initialize() {
@@ -92,8 +130,10 @@ class GoogleTasksSync {
   }
 
   private async getTaskLists(tasksApi: any): Promise<TaskList[]> {
-    const response = await tasksApi.tasklists.list();
-    return response.data.items || [];
+    return this.retryWithBackoff(async () => {
+      const response = await tasksApi.tasklists.list();
+      return response.data.items || [];
+    }, 'getTaskLists');
   }
 
   private async getAllTasks(tasksApi: any, taskListId: string): Promise<Task[]> {
@@ -101,60 +141,73 @@ class GoogleTasksSync {
     let pageToken: string | undefined = undefined;
 
     do {
-      const response: any = await tasksApi.tasks.list({
-        tasklist: taskListId,
-        showCompleted: true,
-        showHidden: true,
-        maxResults: 100,
-        pageToken: pageToken,
-      });
+      const response: any = await this.retryWithBackoff(async () => {
+        return await tasksApi.tasks.list({
+          tasklist: taskListId,
+          showCompleted: true,
+          showHidden: true,
+          maxResults: 100,
+          pageToken: pageToken,
+        });
+      }, `getAllTasks (page ${pageToken || 'first'})`);
 
       if (response.data.items) {
         tasks.push(...response.data.items);
       }
 
       pageToken = response.data.nextPageToken;
+      
+      // Add a small delay between pages to avoid rate limiting
+      if (pageToken) {
+        await this.sleep(200);
+      }
     } while (pageToken);
 
     return tasks;
   }
 
   private async createTask(tasksApi: any, taskListId: string, task: Partial<Task>): Promise<Task> {
-    const response = await tasksApi.tasks.insert({
-      tasklist: taskListId,
-      requestBody: {
-        title: task.title,
-        notes: task.notes,
-        status: task.status,
-        due: task.due,
-      },
-    });
-    return response.data;
+    return this.retryWithBackoff(async () => {
+      const response = await tasksApi.tasks.insert({
+        tasklist: taskListId,
+        requestBody: {
+          title: task.title,
+          notes: task.notes,
+          status: task.status,
+          due: task.due,
+        },
+      });
+      return response.data;
+    }, `createTask: ${task.title}`);
   }
 
   private async updateTask(tasksApi: any, taskListId: string, taskId: string, task: Partial<Task>): Promise<Task> {
     if (!taskId) {
       throw new Error('Cannot update task: taskId is missing');
     }
-    const response = await tasksApi.tasks.update({
-      tasklist: taskListId,
-      task: taskId,
-      requestBody: {
-        id: taskId, // Explicitly include the ID
-        title: task.title,
-        notes: task.notes,
-        status: task.status,
-        due: task.due,
-      },
-    });
-    return response.data;
+    return this.retryWithBackoff(async () => {
+      const response = await tasksApi.tasks.update({
+        tasklist: taskListId,
+        task: taskId,
+        requestBody: {
+          id: taskId, // Explicitly include the ID
+          title: task.title,
+          notes: task.notes,
+          status: task.status,
+          due: task.due,
+        },
+      });
+      return response.data;
+    }, `updateTask: ${task.title}`);
   }
 
   private async deleteTask(tasksApi: any, taskListId: string, taskId: string) {
-    await tasksApi.tasks.delete({
-      tasklist: taskListId,
-      task: taskId,
-    });
+    return this.retryWithBackoff(async () => {
+      await tasksApi.tasks.delete({
+        tasklist: taskListId,
+        task: taskId,
+      });
+    }, `deleteTask: ${taskId}`);
   }
 
   private shouldSyncTask(taskUpdated: string, lastSynced: string): boolean {
@@ -248,7 +301,7 @@ class GoogleTasksSync {
                 await this.updateTask(this.tasksApiB, taskListB.id, taskB.id, taskA);
                 syncRecord.lastSyncedUpdate = taskA.updated;
               } catch (error: any) {
-                console.error(`Failed to update task in B: ${error.message}`);
+                console.error(`Failed to update task in B. Code: ${error.code} Message: ${error.message}`);
                 // Remove from sync state if task no longer exists
                 if (error.code === 404 || error.code === 400) {
                   delete this.syncState.tasks[`${syncRecord.accountAId}-${syncRecord.accountBId}`];
@@ -260,7 +313,7 @@ class GoogleTasksSync {
                 await this.updateTask(this.tasksApiA, taskListA.id, taskA.id, taskB);
                 syncRecord.lastSyncedUpdate = taskB.updated;
               } catch (error: any) {
-                console.error(`Failed to update task in A: ${error.message}`);
+                console.error(`Failed to update task in A. Code: ${error.code} Message: ${error.message}`);
                 if (error.code === 404 || error.code === 400) {
                   delete this.syncState.tasks[`${syncRecord.accountAId}-${syncRecord.accountBId}`];
                 }
@@ -273,7 +326,7 @@ class GoogleTasksSync {
               await this.updateTask(this.tasksApiB, taskListB.id, taskB.id, taskA);
               syncRecord.lastSyncedUpdate = taskA.updated;
             } catch (error: any) {
-              console.error(`Failed to update task in B: ${error.message}`);
+              console.error(`Failed to update task in B. Code: ${error.code} Message: ${error.message}`);
               if (error.code === 404 || error.code === 400) {
                 delete this.syncState.tasks[`${syncRecord.accountAId}-${syncRecord.accountBId}`];
               }
@@ -285,7 +338,7 @@ class GoogleTasksSync {
               await this.updateTask(this.tasksApiA, taskListA.id, taskA.id, taskB);
               syncRecord.lastSyncedUpdate = taskB.updated;
             } catch (error: any) {
-              console.error(`Failed to update task in A: ${error.message}`);
+              console.error(`Failed to update task in A. Code: ${error.code} Message: ${error.message}`);
               if (error.code === 404 || error.code === 400) {
                 delete this.syncState.tasks[`${syncRecord.accountAId}-${syncRecord.accountBId}`];
               }
@@ -299,7 +352,7 @@ class GoogleTasksSync {
           try {
             await this.deleteTask(this.tasksApiA, taskListA.id, taskA.id);
           } catch (error: any) {
-            console.error(`Failed to delete task from A: ${error.message}`);
+            console.error(`Failed to delete task from A. Code: ${error.code} Message: ${error.message}`);
           }
           delete this.syncState.tasks[`${syncRecord.accountAId}-${syncRecord.accountBId}`];
         }
@@ -315,7 +368,7 @@ class GoogleTasksSync {
           };
           processedPairs.add(`${taskA.id}-${newTaskB.id}`);
         } catch (error: any) {
-          console.error(`Failed to create task in B: ${error.message}`);
+          console.error(`Failed to create task in B. Code: ${error.code} Message: ${error.message}`);
         }
       }
     }
@@ -337,7 +390,7 @@ class GoogleTasksSync {
         try {
           await this.deleteTask(this.tasksApiB, taskListB.id, taskB.id);
         } catch (error: any) {
-          console.error(`Failed to delete task from B: ${error.message}`);
+          console.error(`Failed to delete task from B. Code: ${error.code} Message: ${error.message}`);
         }
         delete this.syncState.tasks[pairKey];
       } else {
@@ -351,7 +404,7 @@ class GoogleTasksSync {
             lastSyncedUpdate: taskB.updated,
           };
         } catch (error: any) {
-          console.error(`Failed to create task in A: ${error.message}`);
+          console.error(`Failed to create task in A. Code: ${error.code} Message: ${error.message}`);
         }
       }
     }
