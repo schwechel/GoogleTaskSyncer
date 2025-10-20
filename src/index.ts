@@ -130,8 +130,10 @@ class GoogleTasksSync {
   }
 
   private async getTaskLists(tasksApi: any): Promise<TaskList[]> {
-    const response = await tasksApi.tasklists.list();
-    return response.data.items || [];
+    return this.retryWithBackoff(async () => {
+      const response = await tasksApi.tasklists.list();
+      return response.data.items || [];
+    }, 'getTaskLists');
   }
 
   private async getAllTasks(tasksApi: any, taskListId: string): Promise<Task[]> {
@@ -139,60 +141,73 @@ class GoogleTasksSync {
     let pageToken: string | undefined = undefined;
 
     do {
-      const response: any = await tasksApi.tasks.list({
-        tasklist: taskListId,
-        showCompleted: true,
-        showHidden: true,
-        maxResults: 100,
-        pageToken: pageToken,
-      });
+      const response: any = await this.retryWithBackoff(async () => {
+        return await tasksApi.tasks.list({
+          tasklist: taskListId,
+          showCompleted: true,
+          showHidden: true,
+          maxResults: 100,
+          pageToken: pageToken,
+        });
+      }, `getAllTasks (page ${pageToken || 'first'})`);
 
       if (response.data.items) {
         tasks.push(...response.data.items);
       }
 
       pageToken = response.data.nextPageToken;
+      
+      // Add a small delay between pages to avoid rate limiting
+      if (pageToken) {
+        await this.sleep(200);
+      }
     } while (pageToken);
 
     return tasks;
   }
 
   private async createTask(tasksApi: any, taskListId: string, task: Partial<Task>): Promise<Task> {
-    const response = await tasksApi.tasks.insert({
-      tasklist: taskListId,
-      requestBody: {
-        title: task.title,
-        notes: task.notes,
-        status: task.status,
-        due: task.due,
-      },
-    });
-    return response.data;
+    return this.retryWithBackoff(async () => {
+      const response = await tasksApi.tasks.insert({
+        tasklist: taskListId,
+        requestBody: {
+          title: task.title,
+          notes: task.notes,
+          status: task.status,
+          due: task.due,
+        },
+      });
+      return response.data;
+    }, `createTask: ${task.title}`);
   }
 
   private async updateTask(tasksApi: any, taskListId: string, taskId: string, task: Partial<Task>): Promise<Task> {
     if (!taskId) {
       throw new Error('Cannot update task: taskId is missing');
     }
-    const response = await tasksApi.tasks.update({
-      tasklist: taskListId,
-      task: taskId,
-      requestBody: {
-        id: taskId, // Explicitly include the ID
-        title: task.title,
-        notes: task.notes,
-        status: task.status,
-        due: task.due,
-      },
-    });
-    return response.data;
+    return this.retryWithBackoff(async () => {
+      const response = await tasksApi.tasks.update({
+        tasklist: taskListId,
+        task: taskId,
+        requestBody: {
+          id: taskId, // Explicitly include the ID
+          title: task.title,
+          notes: task.notes,
+          status: task.status,
+          due: task.due,
+        },
+      });
+      return response.data;
+    }, `updateTask: ${task.title}`);
   }
 
   private async deleteTask(tasksApi: any, taskListId: string, taskId: string) {
-    await tasksApi.tasks.delete({
-      tasklist: taskListId,
-      task: taskId,
-    });
+    return this.retryWithBackoff(async () => {
+      await tasksApi.tasks.delete({
+        tasklist: taskListId,
+        task: taskId,
+      });
+    }, `deleteTask: ${taskId}`);
   }
 
   private shouldSyncTask(taskUpdated: string, lastSynced: string): boolean {
