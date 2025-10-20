@@ -348,7 +348,7 @@ class GoogleTasksSync {
           processedPairs.add(`${syncRecord.accountAId}-${syncRecord.accountBId}`);
         } else {
           // Task exists in A and sync record, but not in B - deleted from B
-          console.log(`Deleting from A (deleted in B). Code: ${error.code} Message: ${error.message}`);
+          console.log(`Deleting from A (deleted in B): ${taskA.title}`);
           try {
             await this.deleteTask(this.tasksApiA, taskListA.id, taskA.id);
           } catch (error: any) {
