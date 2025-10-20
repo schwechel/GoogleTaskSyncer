@@ -214,6 +214,15 @@ class GoogleTasksSync {
     return new Date(taskUpdated) > new Date(lastSynced);
   }
 
+  private tasksAreEqual(task1: Task, task2: Task): boolean {
+    return (
+      task1.title === task2.title &&
+      task1.notes === task2.notes &&
+      task1.status === task2.status &&
+      task1.due === task2.due
+    );
+  }
+
   private async findTaskListByName(tasksApi: any, listName: string): Promise<TaskList | null> {
     const lists = await this.getTaskLists(tasksApi);
     return lists.find(list => list.title === listName) || null;
@@ -293,12 +302,19 @@ class GoogleTasksSync {
           const aModified = aUpdated > lastSynced;
           const bModified = bUpdated > lastSynced;
 
+          console.log(`Checking task: ${taskA.title}`);
+          console.log(`  A updated: ${taskA.updated}, B updated: ${taskB.updated}, Last synced: ${syncRecord.lastSyncedUpdate}`);
+          console.log(`  A modified: ${aModified}, B modified: ${bModified}`);
+
           if (aModified && bModified) {
             // Conflict: both modified since last sync - use latest timestamp
             if (aUpdated > bUpdated) {
               console.log(`Conflict resolved: A -> B (${taskA.title})`);
               try {
-                await this.updateTask(this.tasksApiB, taskListB.id, taskB.id, taskA);
+                // Only update if content actually differs
+                if (!this.tasksAreEqual(taskA, taskB)) {
+                  await this.updateTask(this.tasksApiB, taskListB.id, taskB.id, taskA);
+                }
                 syncRecord.lastSyncedUpdate = taskA.updated;
               } catch (error: any) {
                 console.error(`Failed to update task in B. Code: ${error.code} Message: ${error.message}`);
@@ -310,7 +326,9 @@ class GoogleTasksSync {
             } else {
               console.log(`Conflict resolved: B -> A (${taskB.title})`);
               try {
-                await this.updateTask(this.tasksApiA, taskListA.id, taskA.id, taskB);
+                if (!this.tasksAreEqual(taskA, taskB)) {
+                  await this.updateTask(this.tasksApiA, taskListA.id, taskA.id, taskB);
+                }
                 syncRecord.lastSyncedUpdate = taskB.updated;
               } catch (error: any) {
                 console.error(`Failed to update task in A. Code: ${error.code} Message: ${error.message}`);
@@ -323,7 +341,11 @@ class GoogleTasksSync {
             // Only A was modified
             console.log(`Syncing A -> B: ${taskA.title}`);
             try {
-              await this.updateTask(this.tasksApiB, taskListB.id, taskB.id, taskA);
+              if (!this.tasksAreEqual(taskA, taskB)) {
+                await this.updateTask(this.tasksApiB, taskListB.id, taskB.id, taskA);
+              } else {
+                console.log(`  Content identical, skipping update`);
+              }
               syncRecord.lastSyncedUpdate = taskA.updated;
             } catch (error: any) {
               console.error(`Failed to update task in B. Code: ${error.code} Message: ${error.message}`);
@@ -335,7 +357,11 @@ class GoogleTasksSync {
             // Only B was modified
             console.log(`Syncing B -> A: ${taskB.title}`);
             try {
-              await this.updateTask(this.tasksApiA, taskListA.id, taskA.id, taskB);
+              if (!this.tasksAreEqual(taskA, taskB)) {
+                await this.updateTask(this.tasksApiA, taskListA.id, taskA.id, taskB);
+              } else {
+                console.log(`  Content identical, skipping update`);
+              }
               syncRecord.lastSyncedUpdate = taskB.updated;
             } catch (error: any) {
               console.error(`Failed to update task in A. Code: ${error.code} Message: ${error.message}`);
@@ -343,6 +369,8 @@ class GoogleTasksSync {
                 delete this.syncState.tasks[`${syncRecord.accountAId}-${syncRecord.accountBId}`];
               }
             }
+          } else {
+            console.log(`No changes for task: ${taskA.title}`);
           }
 
           processedPairs.add(`${syncRecord.accountAId}-${syncRecord.accountBId}`);
