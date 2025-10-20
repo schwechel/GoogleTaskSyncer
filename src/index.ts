@@ -38,10 +38,48 @@ class GoogleTasksSync {
   private tasksApiB: any;
   private syncState: SyncState;
   private stateFile: string;
+  private readonly MAX_RETRIES = 5;
+  private readonly INITIAL_DELAY_MS = 1000;
 
   constructor() {
     this.stateFile = path.join(process.cwd(), 'sync-state.json');
     this.syncState = { tasks: {}, lastSyncTime: new Date(0).toISOString() };
+  }
+
+  private async sleep(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  private async retryWithBackoff<T>(
+    operation: () => Promise<T>,
+    operationName: string,
+    retries: number = this.MAX_RETRIES
+  ): Promise<T> {
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        return await operation();
+      } catch (error: any) {
+        const isRateLimitError = 
+          error.code === 429 || 
+          error.message?.includes('Quota exceeded') ||
+          error.message?.includes('Rate Limit Exceeded') ||
+          error.message?.includes('rateLimitExceeded');
+
+        if (isRateLimitError && attempt < retries) {
+          const delayMs = this.INITIAL_DELAY_MS * Math.pow(2, attempt);
+          console.log(`Rate limit hit for ${operationName}. Retrying in ${delayMs}ms (attempt ${attempt + 1}/${retries})...`);
+          await this.sleep(delayMs);
+        } else if (attempt < retries && (error.code >= 500 || error.code === 'ECONNRESET')) {
+          // Retry on server errors
+          const delayMs = this.INITIAL_DELAY_MS * Math.pow(2, attempt);
+          console.log(`Server error for ${operationName}. Retrying in ${delayMs}ms (attempt ${attempt + 1}/${retries})...`);
+          await this.sleep(delayMs);
+        } else {
+          throw error;
+        }
+      }
+    }
+    throw new Error(`Failed after ${retries} retries`);
   }
 
   async initialize() {
