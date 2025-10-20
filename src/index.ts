@@ -61,7 +61,7 @@ class GoogleTasksSync {
       } catch (error: any) {
         const isRateLimitError = 
           error.code === 429 || 
-          error.message?.includes('Quota exceeded') ||
+          error.message?.includes('Quota Exceeded') ||
           error.message?.includes('Rate Limit Exceeded') ||
           error.message?.includes('rateLimitExceeded');
 
