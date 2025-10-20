@@ -317,7 +317,7 @@ class GoogleTasksSync {
                 }
                 syncRecord.lastSyncedUpdate = taskA.updated;
               } catch (error: any) {
-                console.error(`Failed to update task in B: ${error.message}`);
+                console.error(`Failed to update task in B. Code: ${error.code} Message: ${error.message}`);
                 // Remove from sync state if task no longer exists
                 if (error.code === 404 || error.code === 400) {
                   delete this.syncState.tasks[`${syncRecord.accountAId}-${syncRecord.accountBId}`];
@@ -331,7 +331,7 @@ class GoogleTasksSync {
                 }
                 syncRecord.lastSyncedUpdate = taskB.updated;
               } catch (error: any) {
-                console.error(`Failed to update task in A: ${error.message}`);
+                console.error(`Failed to update task in A. Code: ${error.code} Message: ${error.message}`);
                 if (error.code === 404 || error.code === 400) {
                   delete this.syncState.tasks[`${syncRecord.accountAId}-${syncRecord.accountBId}`];
                 }
@@ -348,7 +348,7 @@ class GoogleTasksSync {
               }
               syncRecord.lastSyncedUpdate = taskA.updated;
             } catch (error: any) {
-              console.error(`Failed to update task in B: ${error.message}`);
+              console.error(`Failed to update task in B. Code: ${error.code} Message: ${error.message}`);
               if (error.code === 404 || error.code === 400) {
                 delete this.syncState.tasks[`${syncRecord.accountAId}-${syncRecord.accountBId}`];
               }
@@ -364,7 +364,7 @@ class GoogleTasksSync {
               }
               syncRecord.lastSyncedUpdate = taskB.updated;
             } catch (error: any) {
-              console.error(`Failed to update task in A: ${error.message}`);
+              console.error(`Failed to update task in A. Code: ${error.code} Message: ${error.message}`);
               if (error.code === 404 || error.code === 400) {
                 delete this.syncState.tasks[`${syncRecord.accountAId}-${syncRecord.accountBId}`];
               }
@@ -380,7 +380,7 @@ class GoogleTasksSync {
           try {
             await this.deleteTask(this.tasksApiA, taskListA.id, taskA.id);
           } catch (error: any) {
-            console.error(`Failed to delete task from A: ${error.message}`);
+            console.error(`Failed to delete task from A. Code: ${error.code} Message: ${error.message}`);
           }
           delete this.syncState.tasks[`${syncRecord.accountAId}-${syncRecord.accountBId}`];
         }
@@ -396,7 +396,7 @@ class GoogleTasksSync {
           };
           processedPairs.add(`${taskA.id}-${newTaskB.id}`);
         } catch (error: any) {
-          console.error(`Failed to create task in B: ${error.message}`);
+          console.error(`Failed to create task in B. Code: ${error.code} Message: ${error.message}`);
         }
       }
     }
@@ -418,7 +418,7 @@ class GoogleTasksSync {
         try {
           await this.deleteTask(this.tasksApiB, taskListB.id, taskB.id);
         } catch (error: any) {
-          console.error(`Failed to delete task from B: ${error.message}`);
+          console.error(`Failed to delete task from B. Code: ${error.code} Message: ${error.message}`);
         }
         delete this.syncState.tasks[pairKey];
       } else {
@@ -432,7 +432,7 @@ class GoogleTasksSync {
             lastSyncedUpdate: taskB.updated,
           };
         } catch (error: any) {
-          console.error(`Failed to create task in A: ${error.message}`);
+          console.error(`Failed to create task in A. Code: ${error.code} Message: ${error.message}`);
         }
       }
     }
