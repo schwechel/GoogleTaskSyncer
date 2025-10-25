@@ -453,7 +453,15 @@ async function main() {
     await sync.initialize();
     await sync.syncTaskLists();
   } catch (error) {
-    core.error('Sync failed:', error);
+
+    if (error instanceof Error) {
+      core.error(`Sync failed: ${error.message}`);
+      if (error.stack) {
+        core.debug(error.stack); // Stack trace as debug info
+      }
+    } else {
+      core.error(`Sync failed: ${String(error)}`);
+    }
     process.exit(1);
   }
 }
