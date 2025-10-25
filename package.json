@@ -9,7 +9,8 @@
     "dev": "ts-node src/index.ts"
   },
   "dependencies": {
-    "googleapis": "^131.0.0"
+    "googleapis": "^131.0.0",
+    "@actions/core": "^1.10.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
