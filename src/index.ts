@@ -2,6 +2,7 @@ import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 import * as fs from 'fs/promises';
 import * as path from 'path';
+import * as core from '@actions/core';
 
 interface Task {
   id: string;
@@ -67,12 +68,12 @@ class GoogleTasksSync {
 
         if (isRateLimitError && attempt < retries) {
           const delayMs = this.INITIAL_DELAY_MS * Math.pow(2, attempt);
-          console.log(`Rate limit hit for ${operationName}. Retrying in ${delayMs}ms (attempt ${attempt + 1}/${retries})...`);
+          core.error(`Rate limit hit for ${operationName}. Retrying in ${delayMs}ms (attempt ${attempt + 1}/${retries})...`);
           await this.sleep(delayMs);
         } else if (attempt < retries && (error.code >= 500 || error.code === 'ECONNRESET')) {
           // Retry on server errors
           const delayMs = this.INITIAL_DELAY_MS * Math.pow(2, attempt);
-          console.log(`Server error for ${operationName}. Retrying in ${delayMs}ms (attempt ${attempt + 1}/${retries})...`);
+          core.error(`Server error for ${operationName}. Retrying in ${delayMs}ms (attempt ${attempt + 1}/${retries})...`);
           await this.sleep(delayMs);
         } else {
           throw error;
@@ -117,16 +118,16 @@ class GoogleTasksSync {
     try {
       const data = await fs.readFile(this.stateFile, 'utf-8');
       this.syncState = JSON.parse(data);
-      console.log('Loaded existing sync state');
+      core.notice('Loaded existing sync state');
     } catch (error) {
-      console.log('No existing sync state found, starting fresh');
+      core.notice('No existing sync state found, starting fresh');
       this.syncState = { tasks: {}, lastSyncTime: new Date(0).toISOString() };
     }
   }
 
   private async saveSyncState() {
     await fs.writeFile(this.stateFile, JSON.stringify(this.syncState, null, 2));
-    console.log('Sync state saved');
+    core.notice('Sync state saved');
   }
 
   private async getTaskLists(tasksApi: any): Promise<TaskList[]> {
@@ -229,14 +230,15 @@ class GoogleTasksSync {
   }
 
   async syncTaskLists() {
-    console.log('Starting sync...');
+    core.startGroup('Sync Group');
+    core.info('Starting sync...');
 
     // Get task lists from both accounts
     const taskListsA = await this.getTaskLists(this.tasksApiA);
     const taskListsB = await this.getTaskLists(this.tasksApiB);
 
     if (taskListsA.length === 0 || taskListsB.length === 0) {
-      console.error('No task lists found in one or both accounts');
+      core.notice('No task lists found in one or both accounts');
       return;
     }
 
@@ -254,9 +256,9 @@ class GoogleTasksSync {
       if (foundListA && foundListB) {
         taskListA = foundListA;
         taskListB = foundListB;
-        console.log(`Syncing specific list: "${targetListName}"`);
+        core.notice(`Syncing specific list: "${targetListName}"`);
       } else {
-        console.log(`Warning: Task list "${targetListName}" not found in both accounts, using default list`);
+        core.warning(`Warning: Task list "${targetListName}" not found in both accounts, using default list`);
       }
     }
 
@@ -264,17 +266,17 @@ class GoogleTasksSync {
     // const taskListA = await this.findTaskListByName(this.tasksApiA, 'Work Tasks');
     // const taskListB = await this.findTaskListByName(this.tasksApiB, 'Work Tasks');
     // if (!taskListA || !taskListB) {
-    //   console.error('Could not find "Work Tasks" list in both accounts');
+    //   core.error('Could not find "Work Tasks" list in both accounts');
     //   return;
     // }
 
-    console.log(`Syncing: Account A (${taskListA.title}) <-> Account B (${taskListB.title})`);
+    core.notice(`Syncing: Account A (${taskListA.title}) <-> Account B (${taskListB.title})`);
 
     // Fetch all tasks from both accounts
     const tasksA = await this.getAllTasks(this.tasksApiA, taskListA.id);
     const tasksB = await this.getAllTasks(this.tasksApiB, taskListB.id);
 
-    console.log(`Found ${tasksA.length} tasks in Account A, ${tasksB.length} tasks in Account B`);
+    core.notice(`Found ${tasksA.length} tasks in Account A, ${tasksB.length} tasks in Account B`);
 
     // Create maps for easier lookup
     const tasksAMap = new Map(tasksA.map(t => [t.id, t]));
@@ -302,14 +304,14 @@ class GoogleTasksSync {
           const aModified = aUpdated > lastSynced;
           const bModified = bUpdated > lastSynced;
 
-          console.log(`Checking task: ${taskA.title}`);
-          console.log(`  A updated: ${taskA.updated}, B updated: ${taskB.updated}, Last synced: ${syncRecord.lastSyncedUpdate}`);
-          console.log(`  A modified: ${aModified}, B modified: ${bModified}`);
+          core.info(`Checking task: ${taskA.title}`);
+          core.info(`  A updated: ${taskA.updated}, B updated: ${taskB.updated}, Last synced: ${syncRecord.lastSyncedUpdate}`);
+          core.info(`  A modified: ${aModified}, B modified: ${bModified}`);
 
           if (aModified && bModified) {
             // Conflict: both modified since last sync - use latest timestamp
             if (aUpdated > bUpdated) {
-              console.log(`Conflict resolved: A -> B (${taskA.title})`);
+              core.info(`Conflict resolved: A -> B (${taskA.title})`);
               try {
                 // Only update if content actually differs
                 if (!this.tasksAreEqual(taskA, taskB)) {
@@ -317,21 +319,21 @@ class GoogleTasksSync {
                 }
                 syncRecord.lastSyncedUpdate = taskA.updated;
               } catch (error: any) {
-                console.error(`Failed to update task in B. Code: ${error.code} Message: ${error.message}`);
+                core.error(`Failed to update task in B. Code: ${error.code} Message: ${error.message}`);
                 // Remove from sync state if task no longer exists
                 if (error.code === 404 || error.code === 400) {
                   delete this.syncState.tasks[`${syncRecord.accountAId}-${syncRecord.accountBId}`];
                 }
               }
             } else {
-              console.log(`Conflict resolved: B -> A (${taskB.title})`);
+              core.info(`Conflict resolved: B -> A (${taskB.title})`);
               try {
                 if (!this.tasksAreEqual(taskA, taskB)) {
                   await this.updateTask(this.tasksApiA, taskListA.id, taskA.id, taskB);
                 }
                 syncRecord.lastSyncedUpdate = taskB.updated;
               } catch (error: any) {
-                console.error(`Failed to update task in A. Code: ${error.code} Message: ${error.message}`);
+                core.error(`Failed to update task in A. Code: ${error.code} Message: ${error.message}`);
                 if (error.code === 404 || error.code === 400) {
                   delete this.syncState.tasks[`${syncRecord.accountAId}-${syncRecord.accountBId}`];
                 }
@@ -339,54 +341,54 @@ class GoogleTasksSync {
             }
           } else if (aModified) {
             // Only A was modified
-            console.log(`Syncing A -> B: ${taskA.title}`);
+            core.info(`Syncing A -> B: ${taskA.title}`);
             try {
               if (!this.tasksAreEqual(taskA, taskB)) {
                 await this.updateTask(this.tasksApiB, taskListB.id, taskB.id, taskA);
               } else {
-                console.log(`  Content identical, skipping update`);
+                core.info(`  Content identical, skipping update`);
               }
               syncRecord.lastSyncedUpdate = taskA.updated;
             } catch (error: any) {
-              console.error(`Failed to update task in B. Code: ${error.code} Message: ${error.message}`);
+              core.error(`Failed to update task in B. Code: ${error.code} Message: ${error.message}`);
               if (error.code === 404 || error.code === 400) {
                 delete this.syncState.tasks[`${syncRecord.accountAId}-${syncRecord.accountBId}`];
               }
             }
           } else if (bModified) {
             // Only B was modified
-            console.log(`Syncing B -> A: ${taskB.title}`);
+            core.info(`Syncing B -> A: ${taskB.title}`);
             try {
               if (!this.tasksAreEqual(taskA, taskB)) {
                 await this.updateTask(this.tasksApiA, taskListA.id, taskA.id, taskB);
               } else {
-                console.log(`  Content identical, skipping update`);
+                core.info(`  Content identical, skipping update`);
               }
               syncRecord.lastSyncedUpdate = taskB.updated;
             } catch (error: any) {
-              console.error(`Failed to update task in A. Code: ${error.code} Message: ${error.message}`);
+              core.error(`Failed to update task in A. Code: ${error.code} Message: ${error.message}`);
               if (error.code === 404 || error.code === 400) {
                 delete this.syncState.tasks[`${syncRecord.accountAId}-${syncRecord.accountBId}`];
               }
             }
           } else {
-            console.log(`No changes for task: ${taskA.title}`);
+            core.info(`No changes for task: ${taskA.title}`);
           }
 
           processedPairs.add(`${syncRecord.accountAId}-${syncRecord.accountBId}`);
         } else {
           // Task exists in A and sync record, but not in B - deleted from B
-          console.log(`Deleting from A (deleted in B): ${taskA.title}`);
+          core.info(`Deleting from A (deleted in B): ${taskA.title}`);
           try {
             await this.deleteTask(this.tasksApiA, taskListA.id, taskA.id);
           } catch (error: any) {
-            console.error(`Failed to delete task from A. Code: ${error.code} Message: ${error.message}`);
+            core.error(`Failed to delete task from A. Code: ${error.code} Message: ${error.message}`);
           }
           delete this.syncState.tasks[`${syncRecord.accountAId}-${syncRecord.accountBId}`];
         }
       } else {
         // New task in A - create in B
-        console.log(`New task in A, creating in B: ${taskA.title}`);
+        core.info(`New task in A, creating in B: ${taskA.title}`);
         try {
           const newTaskB = await this.createTask(this.tasksApiB, taskListB.id, taskA);
           this.syncState.tasks[`${taskA.id}-${newTaskB.id}`] = {
@@ -396,7 +398,7 @@ class GoogleTasksSync {
           };
           processedPairs.add(`${taskA.id}-${newTaskB.id}`);
         } catch (error: any) {
-          console.error(`Failed to create task in B. Code: ${error.code} Message: ${error.message}`);
+          core.error(`Failed to create task in B. Code: ${error.code} Message: ${error.message}`);
         }
       }
     }
@@ -414,16 +416,16 @@ class GoogleTasksSync {
         }
 
         // Task exists in B and sync record, but not in A - deleted from A
-        console.log(`Deleting from B (deleted in A): ${taskB.title}`);
+        core.info(`Deleting from B (deleted in A): ${taskB.title}`);
         try {
           await this.deleteTask(this.tasksApiB, taskListB.id, taskB.id);
         } catch (error: any) {
-          console.error(`Failed to delete task from B. Code: ${error.code} Message: ${error.message}`);
+          core.error(`Failed to delete task from B. Code: ${error.code} Message: ${error.message}`);
         }
         delete this.syncState.tasks[pairKey];
       } else {
         // New task in B - create in A
-        console.log(`New task in B, creating in A: ${taskB.title}`);
+        core.info(`New task in B, creating in A: ${taskB.title}`);
         try {
           const newTaskA = await this.createTask(this.tasksApiA, taskListA.id, taskB);
           this.syncState.tasks[`${newTaskA.id}-${taskB.id}`] = {
@@ -432,14 +434,15 @@ class GoogleTasksSync {
             lastSyncedUpdate: taskB.updated,
           };
         } catch (error: any) {
-          console.error(`Failed to create task in A. Code: ${error.code} Message: ${error.message}`);
+          core.error(`Failed to create task in A. Code: ${error.code} Message: ${error.message}`);
         }
       }
     }
 
     this.syncState.lastSyncTime = new Date().toISOString();
     await this.saveSyncState();
-    console.log('Sync completed successfully!');
+    core.info('Sync completed successfully!');
+    core.endGroup();
   }
 }
 
@@ -450,7 +453,7 @@ async function main() {
     await sync.initialize();
     await sync.syncTaskLists();
   } catch (error) {
-    console.error('Sync failed:', error);
+    core.error('Sync failed:', error);
     process.exit(1);
   }
 }
