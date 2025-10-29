@@ -37,42 +37,97 @@ You need to get a refresh token for each Google account. Run this script locally
 ```javascript
 // get-tokens.js
 const { google } = require('googleapis');
-const readline = require('readline');
+const http = require('http');
+const url = require('url');
+const open = require('open');
+const destroyer = require('server-destroy');
 
 const CLIENT_ID = 'YOUR_CLIENT_ID';
 const CLIENT_SECRET = 'YOUR_CLIENT_SECRET';
-const REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob';
-
-const oauth2Client = new google.auth.OAuth2(
-  CLIENT_ID,
-  CLIENT_SECRET,
-  REDIRECT_URI
-);
+const REDIRECT_URI = 'http://localhost:3000/oauth2callback';
 
 const SCOPES = ['https://www.googleapis.com/auth/tasks'];
 
-const authUrl = oauth2Client.generateAuthUrl({
-  access_type: 'offline',
-  scope: SCOPES,
-});
+async function getTokens() {
+  return new Promise((resolve, reject) => {
+    const oauth2Client = new google.auth.OAuth2(
+      CLIENT_ID,
+      CLIENT_SECRET,
+      REDIRECT_URI
+    );
 
-console.log('Authorize this app by visiting this url:', authUrl);
+    // Generate the url that will be used for the consent dialog
+    const authorizeUrl = oauth2Client.generateAuthUrl({
+      access_type: 'offline',
+      scope: SCOPES,
+      prompt: 'consent', // Force consent screen to ensure we get a refresh token
+    });
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+    // Create a local server to receive the oauth callback
+    const server = http
+      .createServer(async (req, res) => {
+        try {
+          if (req.url.indexOf('/oauth2callback') > -1) {
+            // Acquire the code from the querystring
+            const qs = new url.URL(req.url, 'http://localhost:3000').searchParams;
+            const code = qs.get('code');
+            
+            console.log('\n✓ Authorization code received');
+            res.end('Authentication successful! You can close this tab and return to the terminal.');
 
-rl.question('Enter the code from that page here: ', async (code) => {
-  rl.close();
-  try {
-    const { tokens } = await oauth2Client.getToken(code);
-    console.log('\nYour refresh token:');
-    console.log(tokens.refresh_token);
-  } catch (error) {
-    console.error('Error retrieving access token', error);
-  }
-});
+            // Exchange authorization code for tokens
+            const { tokens } = await oauth2Client.getToken(code);
+            
+            console.log('\n=================================');
+            console.log('SUCCESS! Your refresh token:');
+            console.log('=================================');
+            console.log(tokens.refresh_token);
+            console.log('=================================\n');
+            console.log('Save this refresh token in your GitHub secrets.');
+            console.log('You only need to do this once per account.\n');
+
+            // Shut down the server
+            server.destroy();
+            resolve(tokens);
+          }
+        } catch (e) {
+          reject(e);
+        }
+      })
+      .listen(3000, () => {
+        // Open the browser to the authorize url to start the workflow
+        console.log('\n=================================');
+        console.log('Opening browser for authorization...');
+        console.log('=================================\n');
+        console.log('If the browser does not open automatically, visit this URL:');
+        console.log(authorizeUrl);
+        console.log('\n');
+        open(authorizeUrl, { wait: false }).then(cp => cp.unref());
+      });
+
+    destroyer(server);
+  });
+}
+
+// Run the script
+console.log('=================================');
+console.log('Google Tasks OAuth Token Generator');
+console.log('=================================\n');
+console.log('This script will:');
+console.log('1. Open your browser');
+console.log('2. Ask you to sign in with Google');
+console.log('3. Generate a refresh token\n');
+console.log('Run this script TWICE - once for each Google account.\n');
+
+node getTokens()
+  .then(() => {
+    console.log('Done! Run this script again for your second account.');
+    process.exit(0);
+  })
+  .catch(error => {
+    console.error('Error getting tokens:', error);
+    process.exit(1);
+  });
 ```
 
 **Run this twice** (once for each account):
