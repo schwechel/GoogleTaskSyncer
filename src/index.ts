@@ -88,13 +88,13 @@ class GoogleTasksSync {
     this.clientA = new google.auth.OAuth2(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
-      'urn:ietf:wg:oauth:2.0:oob'
+      'http://localhost:3000/oauth2callback'
     );
     
     this.clientB = new google.auth.OAuth2(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
-      'urn:ietf:wg:oauth:2.0:oob'
+      'http://localhost:3000/oauth2callback'
     );
 
     // Set credentials from environment variables
