@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "tsc && node dist/index.js",
-    "dev": "ts-node src/index.ts"
+    "dev": "ts-node src/index.ts",
+    "get-tokens": "node get-tokens.js"
   },
   "dependencies": {
     "googleapis": "^131.0.0",
@@ -15,6 +16,8 @@
   "devDependencies": {
     "@types/node": "^20.11.0",
     "typescript": "^5.3.3",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "open": "^8.4.0",
+    "server-destroy": "^1.0.1"
   }
 }
