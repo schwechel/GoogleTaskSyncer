@@ -39,7 +39,6 @@ You need to get a refresh token for each Google account. Run this script locally
 const { google } = require('googleapis');
 const http = require('http');
 const url = require('url');
-const open = require('open');
 const destroyer = require('server-destroy');
 
 const CLIENT_ID = 'YOUR_CLIENT_ID';
@@ -67,16 +66,17 @@ async function getTokens() {
     const server = http
       .createServer(async (req, res) => {
         try {
-          if (req.url.indexOf('/oauth2callback') > -1) {
+          if (req.url && req.url.indexOf('/oauth2callback') > -1) {
             // Acquire the code from the querystring
-            const qs = new url.URL(req.url, 'http://localhost:3000').searchParams;
-            const code = qs.get('code');
+            const parsedUrl = url.parse(req.url, true);
+            const code = parsedUrl.query.code;
             
             console.log('\n✓ Authorization code received');
             res.end('Authentication successful! You can close this tab and return to the terminal.');
 
             // Exchange authorization code for tokens
-            const { tokens } = await oauth2Client.getToken(code);
+            const tokenResponse = await oauth2Client.getToken(code);
+            const tokens = tokenResponse.tokens;
             
             console.log('\n=================================');
             console.log('SUCCESS! Your refresh token:');
@@ -91,18 +91,26 @@ async function getTokens() {
             resolve(tokens);
           }
         } catch (e) {
+          console.error('Error in callback:', e);
           reject(e);
         }
       })
-      .listen(3000, () => {
+      .listen(3000, async () => {
         // Open the browser to the authorize url to start the workflow
         console.log('\n=================================');
         console.log('Opening browser for authorization...');
         console.log('=================================\n');
-        console.log('If the browser does not open automatically, visit this URL:');
+        console.log('Please visit this URL to authorize:');
         console.log(authorizeUrl);
         console.log('\n');
-        open(authorizeUrl, { wait: false }).then(cp => cp.unref());
+        
+        // Try to open browser using dynamic import for ESM module
+        try {
+          const open = (await import('open')).default;
+          await open(authorizeUrl, { wait: false });
+        } catch (err) {
+          console.log('Browser will open automatically, or copy the URL above.');
+        }
       });
 
     destroyer(server);
@@ -119,7 +127,7 @@ console.log('2. Ask you to sign in with Google');
 console.log('3. Generate a refresh token\n');
 console.log('Run this script TWICE - once for each Google account.\n');
 
-node getTokens()
+getTokens()
   .then(() => {
     console.log('Done! Run this script again for your second account.');
     process.exit(0);
