@@ -17073,8 +17073,13 @@
     "Y2QwUUlCYXJXeGY5VGg4Vw-QXhPNDNCellrWFhyUUgxYg": {
       "accountAId": "Y2QwUUlCYXJXeGY5VGg4Vw",
       "accountBId": "QXhPNDNCellrWFhyUUgxYg",
-      "lastSyncedUpdate": "2025-10-30T17:09:28.322Z"
+      "lastSyncedUpdate": "2025-10-30T17:17:48.712Z"
+    },
+    "Z3dVeVFJamtWV3YwV3pvaA-bGpvVERjNWprd3VNTnowWQ": {
+      "accountAId": "Z3dVeVFJamtWV3YwV3pvaA",
+      "accountBId": "bGpvVERjNWprd3VNTnowWQ",
+      "lastSyncedUpdate": "2025-10-30T17:29:56.871Z"
     }
   },
-  "lastSyncTime": "2025-10-30T17:17:51.076Z"
+  "lastSyncTime": "2025-10-30T17:37:33.395Z"
 }
