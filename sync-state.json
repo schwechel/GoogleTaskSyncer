@@ -17288,8 +17288,13 @@
     "VjNXQzRHajJmenJ5TTNiVw-WE1sS1VSdjBTMWVIMXFNSw": {
       "accountAId": "VjNXQzRHajJmenJ5TTNiVw",
       "accountBId": "WE1sS1VSdjBTMWVIMXFNSw",
-      "lastSyncedUpdate": "2025-11-10T18:53:12.003Z"
+      "lastSyncedUpdate": "2025-11-10T18:58:32.862Z"
+    },
+    "b0pTWjRzaG1TNjhOeE5mcw-bzV6c3BjbnI4cVBYMVJqUg": {
+      "accountAId": "b0pTWjRzaG1TNjhOeE5mcw",
+      "accountBId": "bzV6c3BjbnI4cVBYMVJqUg",
+      "lastSyncedUpdate": "2025-11-10T19:18:33.008Z"
     }
   },
-  "lastSyncTime": "2025-11-10T18:58:35.375Z"
+  "lastSyncTime": "2025-11-10T19:19:44.825Z"
 }
