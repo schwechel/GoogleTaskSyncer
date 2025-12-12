@@ -18154,7 +18154,17 @@
       "accountAId": "a24xUk94UzZndWIzUzNCZw",
       "accountBId": "c1NzY3pFYnRWWlpRWlh3Uw",
       "lastSyncedUpdate": "2025-12-11T22:52:39.510Z"
+    },
+    "ZFE2dHRmTTBhZE42V1JmSw-UTlINlotNzBGM1FfZVBuWQ": {
+      "accountAId": "ZFE2dHRmTTBhZE42V1JmSw",
+      "accountBId": "UTlINlotNzBGM1FfZVBuWQ",
+      "lastSyncedUpdate": "2025-12-12T01:31:44.969Z"
+    },
+    "V2U0a094bkFQVV9GaVN0cA-MktCV3FEMlUxMUdsQ3hFSQ": {
+      "accountAId": "V2U0a094bkFQVV9GaVN0cA",
+      "accountBId": "MktCV3FEMlUxMUdsQ3hFSQ",
+      "lastSyncedUpdate": "2025-12-12T01:22:53.149Z"
     }
   },
-  "lastSyncTime": "2025-12-11T23:59:18.489Z"
+  "lastSyncTime": "2025-12-12T02:21:32.152Z"
 }
