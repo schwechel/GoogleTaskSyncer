@@ -17068,7 +17068,7 @@
     "U09PdF9kY3ZrUFp4TWE1bA-aFh6ZGk3QlhZSkdHT1U5UQ": {
       "accountAId": "U09PdF9kY3ZrUFp4TWE1bA",
       "accountBId": "aFh6ZGk3QlhZSkdHT1U5UQ",
-      "lastSyncedUpdate": "2025-11-29T18:14:30.485Z"
+      "lastSyncedUpdate": "2025-12-14T04:20:38.150Z"
     },
     "elktRjZIOEM4U3p2MUpaOQ-eEZyNnlTVDZjTzVZRjdndw": {
       "accountAId": "elktRjZIOEM4U3p2MUpaOQ",
@@ -17553,7 +17553,7 @@
     "cUFYUm51OXZPT0oyY0xXeA-bkxCSFdhSnh3YmRvcDB3MA": {
       "accountAId": "cUFYUm51OXZPT0oyY0xXeA",
       "accountBId": "bkxCSFdhSnh3YmRvcDB3MA",
-      "lastSyncedUpdate": "2025-11-29T18:15:38.358Z"
+      "lastSyncedUpdate": "2025-12-14T04:23:54.244Z"
     },
     "QnNka3hJQVRRYy1tQ0VvdA-VzlyZlRXel9XRmJ5NWhyZA": {
       "accountAId": "QnNka3hJQVRRYy1tQ0VvdA",
@@ -17563,7 +17563,7 @@
     "eG1Zckx1QnM1ZElBaXNaaA-NndvWktJMFpPcE1Bb0gtdg": {
       "accountAId": "eG1Zckx1QnM1ZElBaXNaaA",
       "accountBId": "NndvWktJMFpPcE1Bb0gtdg",
-      "lastSyncedUpdate": "2025-11-29T18:15:39.303Z"
+      "lastSyncedUpdate": "2025-12-14T04:23:10.453Z"
     },
     "bEdfLXprLURNcE1qb3c3Qw-WC11UlcyWWk5ZzZMTzJWZA": {
       "accountAId": "bEdfLXprLURNcE1qb3c3Qw",
@@ -18169,7 +18169,22 @@
       "accountAId": "VXVfbXRWaFoyM3p4VEVFQQ",
       "accountBId": "dWF6VkV5UENFZTlmUjNtMg",
       "lastSyncedUpdate": "2025-12-13T23:59:04.544Z"
+    },
+    "cVVhN2RyTlcxMExaOTlPbg-WVVyZEpSRlNGZmI1OVFRVA": {
+      "accountAId": "cVVhN2RyTlcxMExaOTlPbg",
+      "accountBId": "WVVyZEpSRlNGZmI1OVFRVA",
+      "lastSyncedUpdate": "2025-12-14T04:25:03.041Z"
+    },
+    "TXdRY3V3X0d5cFZGOUVIVQ-aHlaX3I0cnBWY1hwNWh6MA": {
+      "accountAId": "TXdRY3V3X0d5cFZGOUVIVQ",
+      "accountBId": "aHlaX3I0cnBWY1hwNWh6MA",
+      "lastSyncedUpdate": "2025-12-14T04:22:50.070Z"
+    },
+    "akc2LTgzQ1lFMlotN2xPNw-blVrVnAxeXpqNXFxQ2R3bQ": {
+      "accountAId": "akc2LTgzQ1lFMlotN2xPNw",
+      "accountBId": "blVrVnAxeXpqNXFxQ2R3bQ",
+      "lastSyncedUpdate": "2025-12-14T04:20:23.167Z"
     }
   },
-  "lastSyncTime": "2025-12-14T03:50:13.057Z"
+  "lastSyncTime": "2025-12-14T04:31:33.731Z"
 }
