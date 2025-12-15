@@ -17368,7 +17368,7 @@
     "OHJLeEE2YS0zbWc4a0lHYg-b1VtNzZUSng0LURaeC1JRg": {
       "accountAId": "OHJLeEE2YS0zbWc4a0lHYg",
       "accountBId": "b1VtNzZUSng0LURaeC1JRg",
-      "lastSyncedUpdate": "2025-12-08T04:23:11.617Z"
+      "lastSyncedUpdate": "2025-12-15T18:14:39.278Z"
     },
     "TERBZW1GcUtHanRfaDV5Rw-am9lSFF4Y25MZjZ4SXliNg": {
       "accountAId": "TERBZW1GcUtHanRfaDV5Rw",
@@ -17468,7 +17468,7 @@
     "NkNFdFpMX19EV3ZFaEd0eQ-MmJ0TmdBcHg4Y3BjNHU3eA": {
       "accountAId": "NkNFdFpMX19EV3ZFaEd0eQ",
       "accountBId": "MmJ0TmdBcHg4Y3BjNHU3eA",
-      "lastSyncedUpdate": "2025-11-29T18:15:30.282Z"
+      "lastSyncedUpdate": "2025-12-15T18:17:32.972Z"
     },
     "MWxvQmNVWEw3clA5bU5QUw-Q0lxWFFtVnJkcmVoYi1ZbQ": {
       "accountAId": "MWxvQmNVWEw3clA5bU5QUw",
@@ -17943,7 +17943,7 @@
     "UVJmYW40eEhoR1NLYk9GbQ-emdtWWdNMDM4aFRPY05Scg": {
       "accountAId": "UVJmYW40eEhoR1NLYk9GbQ",
       "accountBId": "emdtWWdNMDM4aFRPY05Scg",
-      "lastSyncedUpdate": "2025-12-07T23:42:53.377Z"
+      "lastSyncedUpdate": "2025-12-15T18:17:02.057Z"
     },
     "VXRLRml2My1oNU5YMzZMRA-T2xNX1dUR01qZ0RnYTZmag": {
       "accountAId": "VXRLRml2My1oNU5YMzZMRA",
@@ -18158,7 +18158,7 @@
     "djBObmZPbm9jVWhwT3I5dw-Tk1hVTJITDBQVjQzSi1kdA": {
       "accountAId": "djBObmZPbm9jVWhwT3I5dw",
       "accountBId": "Tk1hVTJITDBQVjQzSi1kdA",
-      "lastSyncedUpdate": "2025-12-15T13:52:19.448Z"
+      "lastSyncedUpdate": "2025-12-15T18:14:13.183Z"
     },
     "TVlPY1h2QVhxZGpLZEVSaw-U1oxTnM1MXJaRkotUHFFUQ": {
       "accountAId": "TVlPY1h2QVhxZGpLZEVSaw",
@@ -18204,7 +18204,17 @@
       "accountAId": "Um9iYVpvY2ZYbDBQdkpPLQ",
       "accountBId": "ci1IaDFOTjFla09OazI0Yw",
       "lastSyncedUpdate": "2025-12-15T16:43:13.231Z"
+    },
+    "NHRZMUE5M05hblZwM0xOQw-ajR4RGVaSnZnUHhkdEJ6Qg": {
+      "accountAId": "NHRZMUE5M05hblZwM0xOQw",
+      "accountBId": "ajR4RGVaSnZnUHhkdEJ6Qg",
+      "lastSyncedUpdate": "2025-12-15T18:34:51.197Z"
+    },
+    "b09BckFkeGM1akJYZTloeQ-bVQxY0JhLWxaeEJSTlJXTw": {
+      "accountAId": "b09BckFkeGM1akJYZTloeQ",
+      "accountBId": "bVQxY0JhLWxaeEJSTlJXTw",
+      "lastSyncedUpdate": "2025-12-15T18:34:21.439Z"
     }
   },
-  "lastSyncTime": "2025-12-15T18:00:02.683Z"
+  "lastSyncTime": "2025-12-15T18:47:41.113Z"
 }
