@@ -18454,7 +18454,12 @@
       "accountAId": "ZlcyN04zMTc0OWlMSHB6YQ",
       "accountBId": "TDAzVHFBSXlHTVh1OXZFcg",
       "lastSyncedUpdate": "2025-12-29T02:32:56.325Z"
+    },
+    "LVVrazBQNVpIUlRjeDVZTQ-c1dVY3NyQTJneFh6V3lFbA": {
+      "accountAId": "LVVrazBQNVpIUlRjeDVZTQ",
+      "accountBId": "c1dVY3NyQTJneFh6V3lFbA",
+      "lastSyncedUpdate": "2025-12-29T05:48:31.869Z"
     }
   },
-  "lastSyncTime": "2025-12-29T05:39:27.726Z"
+  "lastSyncTime": "2025-12-29T05:58:39.637Z"
 }
