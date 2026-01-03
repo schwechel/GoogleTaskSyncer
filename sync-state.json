@@ -18413,7 +18413,7 @@
     "U25kRk1hZE5LZXVWWGZPSQ-cnlfcDlBQV9LWTdESGZrTw": {
       "accountAId": "U25kRk1hZE5LZXVWWGZPSQ",
       "accountBId": "cnlfcDlBQV9LWTdESGZrTw",
-      "lastSyncedUpdate": "2026-01-03T04:21:55.303Z"
+      "lastSyncedUpdate": "2026-01-03T22:41:47.144Z"
     },
     "SkptelcyUV9GTkY0UHJ5dQ-QlZhU1BxMEVMVVlqVTlEWg": {
       "accountAId": "SkptelcyUV9GTkY0UHJ5dQ",
@@ -18453,7 +18453,7 @@
     "TnptNjZYNUtQY1ZEdG1OMw-RlRMN3d6RWg5SFRKb1NpMA": {
       "accountAId": "TnptNjZYNUtQY1ZEdG1OMw",
       "accountBId": "RlRMN3d6RWg5SFRKb1NpMA",
-      "lastSyncedUpdate": "2025-12-31T17:27:45.741Z"
+      "lastSyncedUpdate": "2026-01-03T22:41:34.294Z"
     },
     "ajduY2tZdlhfZU9Da3JYUg-SzloRk54QTEtV3R1ZEZDcA": {
       "accountAId": "ajduY2tZdlhfZU9Da3JYUg",
@@ -18648,12 +18648,12 @@
     "bUsybFhlYnJtTHZVeE96TA-MEJJTGtEc04xcEt5UFVPQg": {
       "accountAId": "bUsybFhlYnJtTHZVeE96TA",
       "accountBId": "MEJJTGtEc04xcEt5UFVPQg",
-      "lastSyncedUpdate": "2026-01-03T06:19:50.246Z"
+      "lastSyncedUpdate": "2026-01-03T22:41:28.329Z"
     },
     "OTNqQThNMkxwYU03MzBodA-N3g2RWYweHBaeGlQaFNUcw": {
       "accountAId": "OTNqQThNMkxwYU03MzBodA",
       "accountBId": "N3g2RWYweHBaeGlQaFNUcw",
-      "lastSyncedUpdate": "2026-01-03T06:19:50.675Z"
+      "lastSyncedUpdate": "2026-01-03T22:41:54.515Z"
     },
     "ZlFoQWZ1QjdxdzRyUDZ2Nw-SHpGM0VLUXZteXJjNGttWQ": {
       "accountAId": "ZlFoQWZ1QjdxdzRyUDZ2Nw",
@@ -18664,7 +18664,17 @@
       "accountAId": "T1JaYW5Cd0F3aFAyRnpJUg",
       "accountBId": "WWd0eGdObGhBUEJyd01lNw",
       "lastSyncedUpdate": "2026-01-03T13:52:04.000Z"
+    },
+    "ZkU3RUVSYXhGYXBOU2g2Yg-bXlxUDJqTHNfUWVtWWlkZg": {
+      "accountAId": "ZkU3RUVSYXhGYXBOU2g2Yg",
+      "accountBId": "bXlxUDJqTHNfUWVtWWlkZg",
+      "lastSyncedUpdate": "2026-01-03T22:41:12.074Z"
+    },
+    "RXo3ZmZTRGl4SExGaVB1Yg-V05vX1NYQmc3VDRGS1ZjcA": {
+      "accountAId": "RXo3ZmZTRGl4SExGaVB1Yg",
+      "accountBId": "V05vX1NYQmc3VDRGS1ZjcA",
+      "lastSyncedUpdate": "2026-01-03T22:40:22.294Z"
     }
   },
-  "lastSyncTime": "2026-01-03T22:31:16.653Z"
+  "lastSyncTime": "2026-01-03T22:51:57.350Z"
 }
