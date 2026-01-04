@@ -18694,7 +18694,12 @@
       "accountAId": "QVM1QV9Ma2VTdU1IckVqaQ",
       "accountBId": "N1FsQmJCUDQ5bVJUWV9Lcw",
       "lastSyncedUpdate": "2026-01-04T17:25:23.594Z"
+    },
+    "RkhVZzBxbk1CSWp4Tm1RRw-WUdrUFJSaXJ0MjYxam5iUw": {
+      "accountAId": "RkhVZzBxbk1CSWp4Tm1RRw",
+      "accountBId": "WUdrUFJSaXJ0MjYxam5iUw",
+      "lastSyncedUpdate": "2026-01-04T23:45:09.206Z"
     }
   },
-  "lastSyncTime": "2026-01-04T23:27:29.489Z"
+  "lastSyncTime": "2026-01-04T23:45:52.326Z"
 }
