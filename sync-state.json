@@ -18679,7 +18679,12 @@
       "accountAId": "RVR6Z2V6VFJjYjBGaDZmdw",
       "accountBId": "R3c1ZGFQUjEtUG9rekpxaw",
       "lastSyncedUpdate": "2026-01-04T13:37:13.869Z"
+    },
+    "R0lpd3FQeF90RmRYb0pMdg-RlRxWkhLalpXZEdnQW9wMQ": {
+      "accountAId": "R0lpd3FQeF90RmRYb0pMdg",
+      "accountBId": "RlRxWkhLalpXZEdnQW9wMQ",
+      "lastSyncedUpdate": "2026-01-04T14:40:44.491Z"
     }
   },
-  "lastSyncTime": "2026-01-04T14:26:22.556Z"
+  "lastSyncTime": "2026-01-04T14:44:59.131Z"
 }
