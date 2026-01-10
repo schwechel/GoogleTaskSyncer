@@ -18590,11 +18590,6 @@
       "accountBId": "N3g2RWYweHBaeGlQaFNUcw",
       "lastSyncedUpdate": "2026-01-03T22:51:50.410Z"
     },
-    "ZkU3RUVSYXhGYXBOU2g2Yg-bXlxUDJqTHNfUWVtWWlkZg": {
-      "accountAId": "ZkU3RUVSYXhGYXBOU2g2Yg",
-      "accountBId": "bXlxUDJqTHNfUWVtWWlkZg",
-      "lastSyncedUpdate": "2026-01-03T22:51:51.420Z"
-    },
     "RXo3ZmZTRGl4SExGaVB1Yg-V05vX1NYQmc3VDRGS1ZjcA": {
       "accountAId": "RXo3ZmZTRGl4SExGaVB1Yg",
       "accountBId": "V05vX1NYQmc3VDRGS1ZjcA",
@@ -18846,5 +18841,5 @@
       "lastSyncedUpdate": "2026-01-10T06:17:49.399Z"
     }
   },
-  "lastSyncTime": "2026-01-10T12:58:23.519Z"
+  "lastSyncTime": "2026-01-10T13:36:34.288Z"
 }
