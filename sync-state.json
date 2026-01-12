@@ -18859,7 +18859,17 @@
       "accountAId": "LU4zWllWOEVrcUlxVHJzMg",
       "accountBId": "dkY1QW1iT291XzJFMWV3cw",
       "lastSyncedUpdate": "2026-01-11T19:59:18.537Z"
+    },
+    "NmtuYW0waVA3VG03NmFIbw-dVByUnAxUm1NQ1ZDOVJzZA": {
+      "accountAId": "NmtuYW0waVA3VG03NmFIbw",
+      "accountBId": "dVByUnAxUm1NQ1ZDOVJzZA",
+      "lastSyncedUpdate": "2026-01-12T01:52:24.908Z"
+    },
+    "cjQwdWItOWJNNmZWTHBuTg-ZXlMNGV0YWowNzVnYVFzWg": {
+      "accountAId": "cjQwdWItOWJNNmZWTHBuTg",
+      "accountBId": "ZXlMNGV0YWowNzVnYVFzWg",
+      "lastSyncedUpdate": "2026-01-12T00:48:46.343Z"
     }
   },
-  "lastSyncTime": "2026-01-11T23:51:15.276Z"
+  "lastSyncTime": "2026-01-12T02:28:15.158Z"
 }
