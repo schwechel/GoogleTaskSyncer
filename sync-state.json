@@ -17295,11 +17295,6 @@
       "accountBId": "bGgwcFppT0w0aFBwQ0xWLQ",
       "lastSyncedUpdate": "2025-12-07T02:27:24.180Z"
     },
-    "YzRWVUp4X3EyUzRGX21UWA-T1hZSWtqc3dRQkFOc1FMYQ": {
-      "accountAId": "YzRWVUp4X3EyUzRGX21UWA",
-      "accountBId": "T1hZSWtqc3dRQkFOc1FMYQ",
-      "lastSyncedUpdate": "2025-12-22T02:27:27.638Z"
-    },
     "a2pkRkJkSnY4LVlfb2NrTg-VHZYZ0dyTE1qc0ZiUnNYRA": {
       "accountAId": "a2pkRkJkSnY4LVlfb2NrTg",
       "accountBId": "VHZYZ0dyTE1qc0ZiUnNYRA",
@@ -18955,11 +18950,6 @@
       "accountBId": "TFpTVkxYZHpLdGJGSHJ5bw",
       "lastSyncedUpdate": "2026-01-18T03:17:40.193Z"
     },
-    "UGw4aENKdGRJOXV4ZzF6Rg-UnlBMzAwMVVTTHNncXpyVQ": {
-      "accountAId": "UGw4aENKdGRJOXV4ZzF6Rg",
-      "accountBId": "UnlBMzAwMVVTTHNncXpyVQ",
-      "lastSyncedUpdate": "2026-01-18T04:16:36.416Z"
-    },
     "ME9EWG41Nzd6RzNtZzNMTQ-VUZxdGw2UkRSZ3djNE15NQ": {
       "accountAId": "ME9EWG41Nzd6RzNtZzNMTQ",
       "accountBId": "VUZxdGw2UkRSZ3djNE15NQ",
@@ -18969,11 +18959,6 @@
       "accountAId": "WTg5ZGRNNG8tbUJTZ3daSw",
       "accountBId": "bzBWRjhVOWdyNmJGUEN6Mg",
       "lastSyncedUpdate": "2026-01-17T21:25:49.853Z"
-    },
-    "ZGM5R05xLTVJNlg2TmVSRA-cEw4dFhPVGNLMVUzV1dVTQ": {
-      "accountAId": "ZGM5R05xLTVJNlg2TmVSRA",
-      "accountBId": "cEw4dFhPVGNLMVUzV1dVTQ",
-      "lastSyncedUpdate": "2026-01-17T19:41:47.767Z"
     },
     "UzA5OUJPT0k2V0FIRi1HTw-cHR3UkNEbzJEV2g5WEU3cw": {
       "accountAId": "UzA5OUJPT0k2V0FIRi1HTw",
@@ -18999,7 +18984,22 @@
       "accountAId": "TTJxbHM0c0Y4QmFIR1JGMw",
       "accountBId": "cEh0MGc5ZHBtRlNjLWkzbQ",
       "lastSyncedUpdate": "2026-01-18T04:16:40.762Z"
+    },
+    "TGNDalRWd2MzSnZTSXZBMw-MEx0N192TlplRi1COXFJcA": {
+      "accountAId": "TGNDalRWd2MzSnZTSXZBMw",
+      "accountBId": "MEx0N192TlplRi1COXFJcA",
+      "lastSyncedUpdate": "2026-01-18T06:00:02.051Z"
+    },
+    "VjI0bEZLNWdIUWxGR3BmaQ-WTNMQUNwQVpqQWJqYXhfcA": {
+      "accountAId": "VjI0bEZLNWdIUWxGR3BmaQ",
+      "accountBId": "WTNMQUNwQVpqQWJqYXhfcA",
+      "lastSyncedUpdate": "2026-01-18T06:00:02.051Z"
+    },
+    "d0tGUzM1VTJpbXUyQXNRSw-cTRhVkl4Rlhpc2tfX0E5MQ": {
+      "accountAId": "d0tGUzM1VTJpbXUyQXNRSw",
+      "accountBId": "cTRhVkl4Rlhpc2tfX0E5MQ",
+      "lastSyncedUpdate": "2026-01-18T06:00:02.051Z"
     }
   },
-  "lastSyncTime": "2026-01-18T05:52:52.097Z"
+  "lastSyncTime": "2026-01-18T06:42:30.170Z"
 }
