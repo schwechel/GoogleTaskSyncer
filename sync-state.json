@@ -19099,7 +19099,12 @@
       "accountAId": "Z1hERHVfZ2p5ZUctaERteg",
       "accountBId": "M0lEeXRPMzZDRm1Wb1g1Uw",
       "lastSyncedUpdate": "2026-01-23T14:59:04.893Z"
+    },
+    "alVEYmdhOEJHb1pRZjBTeQ-eVY4RFoxLXdtb2FHUFhtdw": {
+      "accountAId": "alVEYmdhOEJHb1pRZjBTeQ",
+      "accountBId": "eVY4RFoxLXdtb2FHUFhtdw",
+      "lastSyncedUpdate": "2026-01-23T16:28:25.758Z"
     }
   },
-  "lastSyncTime": "2026-01-23T15:59:03.420Z"
+  "lastSyncTime": "2026-01-23T16:45:03.058Z"
 }
