@@ -19168,8 +19168,13 @@
     "V1Z6QmlhaVRCSkFKamFpWA-SDF5ZXR2bnVSZVdJLWxKZg": {
       "accountAId": "V1Z6QmlhaVRCSkFKamFpWA",
       "accountBId": "SDF5ZXR2bnVSZVdJLWxKZg",
-      "lastSyncedUpdate": "2026-01-27T20:48:38.067Z"
+      "lastSyncedUpdate": "2026-01-27T20:56:40.913Z"
+    },
+    "ZC1WMUxHVW5ta0QyaFRxNw-OGo1NEpWYWo2Q2tOLVVVNA": {
+      "accountAId": "ZC1WMUxHVW5ta0QyaFRxNw",
+      "accountBId": "OGo1NEpWYWo2Q2tOLVVVNA",
+      "lastSyncedUpdate": "2026-01-27T21:17:04.701Z"
     }
   },
-  "lastSyncTime": "2026-01-27T20:56:43.867Z"
+  "lastSyncTime": "2026-01-27T21:27:55.933Z"
 }
