@@ -19248,8 +19248,13 @@
     "ZUZtR2p0Q3AzNkhBcjMyUA-WElKcnRHdWNQcFJ3bUhCeA": {
       "accountAId": "ZUZtR2p0Q3AzNkhBcjMyUA",
       "accountBId": "WElKcnRHdWNQcFJ3bUhCeA",
-      "lastSyncedUpdate": "2026-01-29T14:11:34.608Z"
+      "lastSyncedUpdate": "2026-01-29T15:00:09.726Z"
+    },
+    "SmN5MVVZTnFJaVV6ZG9tYQ-N21sbUozNkROZW9lUGhfOQ": {
+      "accountAId": "SmN5MVVZTnFJaVV6ZG9tYQ",
+      "accountBId": "N21sbUozNkROZW9lUGhfOQ",
+      "lastSyncedUpdate": "2026-01-29T15:14:40.004Z"
     }
   },
-  "lastSyncTime": "2026-01-29T15:00:12.747Z"
+  "lastSyncTime": "2026-01-29T15:50:18.802Z"
 }
