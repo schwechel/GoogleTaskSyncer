@@ -19148,7 +19148,7 @@
     "SmVtX2QwVWdHTkxETkhpUg-SzdwTEFKZGxTenhpeEk3dA": {
       "accountAId": "SmVtX2QwVWdHTkxETkhpUg",
       "accountBId": "SzdwTEFKZGxTenhpeEk3dA",
-      "lastSyncedUpdate": "2026-02-21T03:26:56.871Z"
+      "lastSyncedUpdate": "2026-02-21T19:10:42.688Z"
     },
     "OF9GTW9YclpMYi16YmN2NA-V1JxeWlOS3UwZW5ObXRFOA": {
       "accountAId": "OF9GTW9YclpMYi16YmN2NA",
@@ -19268,7 +19268,7 @@
     "U2ZxS1AzRGRLb1VLRWdZVg-dy01N2VadzZfQnZySzVWMQ": {
       "accountAId": "U2ZxS1AzRGRLb1VLRWdZVg",
       "accountBId": "dy01N2VadzZfQnZySzVWMQ",
-      "lastSyncedUpdate": "2026-02-16T18:57:22.094Z"
+      "lastSyncedUpdate": "2026-02-21T19:10:58.581Z"
     },
     "WlNlTjdkSWd6RFFxcTRORg-akgyZUQxOGU4Qm45dl9DbQ": {
       "accountAId": "WlNlTjdkSWd6RFFxcTRORg",
@@ -19583,7 +19583,7 @@
     "QnBKbEJXLU1YVEZIQjV0Rg-Qk9FV0FFU2JZSTJUMlI0YQ": {
       "accountAId": "QnBKbEJXLU1YVEZIQjV0Rg",
       "accountBId": "Qk9FV0FFU2JZSTJUMlI0YQ",
-      "lastSyncedUpdate": "2026-02-21T06:34:07.310Z"
+      "lastSyncedUpdate": "2026-02-21T19:11:00.445Z"
     },
     "ZUJWNlZKTVhFa1ZOdVBLbg-TjFISHdxMDBLTndFSExsRw": {
       "accountAId": "ZUJWNlZKTVhFa1ZOdVBLbg",
@@ -19604,7 +19604,12 @@
       "accountAId": "aDlndXdJQkw1b0VSYzU5Ug",
       "accountBId": "MEtUZ0FMR1BpOFlGSFh3YQ",
       "lastSyncedUpdate": "2026-02-21T06:34:09.002Z"
+    },
+    "Q2JOeDUxMWtWR2tJWEpQRA-cDJZZUtsSWhXQTN6c3JlUQ": {
+      "accountAId": "Q2JOeDUxMWtWR2tJWEpQRA",
+      "accountBId": "cDJZZUtsSWhXQTN6c3JlUQ",
+      "lastSyncedUpdate": "2026-02-21T19:11:20.076Z"
     }
   },
-  "lastSyncTime": "2026-02-21T18:52:07.750Z"
+  "lastSyncTime": "2026-02-21T19:32:16.727Z"
 }
