@@ -21188,8 +21188,13 @@
     "OGhTMktweFdDdWlYODFjOA-T2MzQm43Y3g4WGZ5alZyUA": {
       "accountAId": "OGhTMktweFdDdWlYODFjOA",
       "accountBId": "T2MzQm43Y3g4WGZ5alZyUA",
-      "lastSyncedUpdate": "2026-05-08T16:23:21.073Z"
+      "lastSyncedUpdate": "2026-05-08T16:44:59.185Z"
+    },
+    "Yk1YUlJURjFsblVnbjUtSQ-cDAtelpmd2dWTUJ3UUJZWA": {
+      "accountAId": "Yk1YUlJURjFsblVnbjUtSQ",
+      "accountBId": "cDAtelpmd2dWTUJ3UUJZWA",
+      "lastSyncedUpdate": "2026-05-08T16:54:49.061Z"
     }
   },
-  "lastSyncTime": "2026-05-08T16:45:02.509Z"
+  "lastSyncTime": "2026-05-08T18:01:39.522Z"
 }
