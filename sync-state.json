@@ -22163,8 +22163,13 @@
     "M0d3blFFOGlrb2RFd0lkTw-R1psdWtpc1IxcmpqYnFONQ": {
       "accountAId": "M0d3blFFOGlrb2RFd0lkTw",
       "accountBId": "R1psdWtpc1IxcmpqYnFONQ",
-      "lastSyncedUpdate": "2026-06-12T20:59:03.844Z"
+      "lastSyncedUpdate": "2026-06-12T22:14:25.753Z"
+    },
+    "TkNlYldoNDExODhmcFUxQw-d3ZueDBvaGxwaWV3dUJ1WQ": {
+      "accountAId": "TkNlYldoNDExODhmcFUxQw",
+      "accountBId": "d3ZueDBvaGxwaWV3dUJ1WQ",
+      "lastSyncedUpdate": "2026-06-12T23:12:47.829Z"
     }
   },
-  "lastSyncTime": "2026-06-12T22:14:30.370Z"
+  "lastSyncTime": "2026-06-12T23:57:22.831Z"
 }
