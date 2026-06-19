@@ -22318,8 +22318,13 @@
     "N3ZHa2JBdmtMdWtOZE5ESg-SEV5NkJPR3JYLWhjNmt0Xw": {
       "accountAId": "N3ZHa2JBdmtMdWtOZE5ESg",
       "accountBId": "SEV5NkJPR3JYLWhjNmt0Xw",
-      "lastSyncedUpdate": "2026-06-19T15:14:35.697Z"
+      "lastSyncedUpdate": "2026-06-19T16:28:00.558Z"
+    },
+    "OWtDT0VUaENhblo2SUxjZQ-enRuTDY2Z3F1ZTRMb1Znbw": {
+      "accountAId": "OWtDT0VUaENhblo2SUxjZQ",
+      "accountBId": "enRuTDY2Z3F1ZTRMb1Znbw",
+      "lastSyncedUpdate": "2026-06-19T17:16:36.136Z"
     }
   },
-  "lastSyncTime": "2026-06-19T16:28:05.466Z"
+  "lastSyncTime": "2026-06-19T18:19:58.808Z"
 }
