@@ -23683,8 +23683,13 @@
     "QlFBWVNJWC1LR1NzOGZDRg-OFlRT19FbG8wTWZ3R0tVSw": {
       "accountAId": "QlFBWVNJWC1LR1NzOGZDRg",
       "accountBId": "OFlRT19FbG8wTWZ3R0tVSw",
-      "lastSyncedUpdate": "2026-08-20T15:23:35.694Z"
+      "lastSyncedUpdate": "2026-08-20T15:58:01.032Z"
+    },
+    "NXlVZkJPcDZZMzRrQm5FTA-SHUzWjBMYWkwR3hsNk05RA": {
+      "accountAId": "NXlVZkJPcDZZMzRrQm5FTA",
+      "accountBId": "SHUzWjBMYWkwR3hsNk05RA",
+      "lastSyncedUpdate": "2026-08-20T16:41:14.676Z"
     }
   },
-  "lastSyncTime": "2026-08-20T15:58:06.689Z"
+  "lastSyncTime": "2026-08-20T16:45:29.290Z"
 }
