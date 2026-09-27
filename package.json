@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "start": "tsc && node dist/index.js",
+    "start": "node src/index.ts",
     "dev": "ts-node src/index.ts",
     "get-tokens": "node get-tokens.js"
   },

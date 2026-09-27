@@ -217,7 +217,7 @@ git push origin main
 
 ## How It Works
 
-- **Sync frequency**: Every 10 minutes (configurable in sync.yml)
+- **Sync frequency**: Every 10 minutes from 6am to 11pm Central, paused overnight (configurable in sync.yml)
 - **Conflict resolution**: Latest timestamp wins
 - **Deletions**: If you delete a task in one account, it deletes from the other
 - **New tasks**: Created in both accounts automatically
@@ -264,8 +264,11 @@ Edit `.github/workflows/sync.yml`:
 
 ```yaml
 schedule:
-  - cron: '*/10 * * * *'  # Change */10 to */15 for 15 minutes, etc.
+  - cron: '*/10 6-22 * * *'  # Change */10 to */15 for 15 minutes, etc.
+    timezone: 'America/Chicago'  # Any IANA time zone; daylight saving is handled
 ```
+
+The `6-22` hour range means runs happen from 6:00am through 10:50pm local time.
 
 Cron syntax:
 - `*/10` = every 10 minutes
@@ -300,10 +303,10 @@ Remove the deletion logic blocks in the sync code if you don't want deletions to
 
 ## Cost
 
-Everything is **completely free**:
+Everything is **free** when the repo is public:
 - Google Cloud: Free tier includes 1M API calls/month
-- GitHub Actions: 2,000 minutes/month free (this uses ~5 seconds per run)
-- Running every 10 minutes = ~4,300 runs/month = ~6 hours of GitHub Actions time
+- GitHub Actions: free for public repos. For private repos, the Free plan includes 2,000 minutes/month and each run is billed as at least 1 minute (rounded up)
+- The default schedule is about 102 runs/day (~3,100/month), each expected to take under a minute
 
 ## Security Notes
 
