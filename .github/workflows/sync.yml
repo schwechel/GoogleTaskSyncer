@@ -2,40 +2,37 @@ name: Sync Google Tasks
 
 on:
   schedule:
-    # Run every 10 minutes
-    - cron: '*/10 * * * *'
-    # Run every hour
-    # - cron: '0 * * * *'
+    # Every 10 minutes from 6:00am to 10:50pm Central (no runs 11pm to 6am)
+    - cron: '*/10 6-22 * * *'
+      timezone: 'America/Chicago'
   workflow_dispatch: # Allows manual triggering
 
 permissions:
   contents: write  # Needed to commit and push changes
 
+# Never run two syncs at once; a queued run waits for the current one
+concurrency:
+  group: sync
+  cancel-in-progress: false
+
 jobs:
   sync:
     runs-on: ubuntu-latest
-    
+    timeout-minutes: 5
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        ref: ${{ github.ref }}
-    
-    - name: Pull latest changes
-      run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
-        git pull origin ${{ github.ref }} || true
-    
+
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
-    
+        node-version: '24'
+        cache: 'npm'
+
     - name: Install dependencies
-      run: npm install
-    
+      run: npm ci --omit=dev --no-audit --no-fund
+
     - name: Check for existing sync state
       run: |
         if [ -f sync-state.json ]; then
@@ -43,7 +40,7 @@ jobs:
         else
           echo "No previous sync state found - starting fresh"
         fi
-    
+
     - name: Run sync
       env:
         GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
@@ -51,8 +48,9 @@ jobs:
         ACCOUNT_A_REFRESH_TOKEN: ${{ secrets.ACCOUNT_A_REFRESH_TOKEN }}
         ACCOUNT_B_REFRESH_TOKEN: ${{ secrets.ACCOUNT_B_REFRESH_TOKEN }}
         TASK_LIST_NAME: ${{ secrets.TASK_LIST_NAME }}  # Optional: specify which list to sync
-      run: npm start
-    
+      # Node runs the TypeScript directly (type stripping), so no tsc step
+      run: node src/index.ts
+
     - name: Commit and push sync state
       run: |
         git config user.name "github-actions[bot]"
