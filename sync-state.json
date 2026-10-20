@@ -24678,7 +24678,7 @@
     "dXV1T25hMl9zcG5DTWN0NA-Uk9LTkZmQTVsWnFGajBJLQ": {
       "accountAId": "dXV1T25hMl9zcG5DTWN0NA",
       "accountBId": "Uk9LTkZmQTVsWnFGajBJLQ",
-      "lastSyncedUpdate": "2026-10-19T18:01:13.619Z"
+      "lastSyncedUpdate": "2026-10-19T21:40:40.387Z"
     },
     "bUtMYnZfS1BBVTR6bkhncQ-RTdyZkZ6WjgxWF9WQUR1NQ": {
       "accountAId": "bUtMYnZfS1BBVTR6bkhncQ",
@@ -24803,7 +24803,7 @@
     "TTE4UnpZaGdpSkx0RHN4RA-SExWVUEwTzlMeVZyalZFUw": {
       "accountAId": "TTE4UnpZaGdpSkx0RHN4RA",
       "accountBId": "SExWVUEwTzlMeVZyalZFUw",
-      "lastSyncedUpdate": "2026-10-19T19:58:29.637Z"
+      "lastSyncedUpdate": "2026-10-19T21:40:42.014Z"
     },
     "a2RmMFFmcVJkSTdhU2ZMXw-QUJlTkptUnZVNEk0ZFJrMQ": {
       "accountAId": "a2RmMFFmcVJkSTdhU2ZMXw",
@@ -24873,7 +24873,7 @@
     "Vk1ENm5aZGJFYUt5bEZBdQ-ZmtDUF9GalF2QlJQbXpuXw": {
       "accountAId": "Vk1ENm5aZGJFYUt5bEZBdQ",
       "accountBId": "ZmtDUF9GalF2QlJQbXpuXw",
-      "lastSyncedUpdate": "2026-10-19T19:53:17.575Z"
+      "lastSyncedUpdate": "2026-10-19T21:40:40.885Z"
     },
     "Wklma1FvUVk4Vk9JTUtBbA-ZHJOc2VOOEg4N2Y3bEJ0VA": {
       "accountAId": "Wklma1FvUVk4Vk9JTUtBbA",
@@ -25008,7 +25008,7 @@
     "c1dBU1VCNy1XTzBrdEZlYQ-VWFxV3VTWE9uTU1KMG9TVA": {
       "accountAId": "c1dBU1VCNy1XTzBrdEZlYQ",
       "accountBId": "VWFxV3VTWE9uTU1KMG9TVA",
-      "lastSyncedUpdate": "2026-10-19T19:58:38.760Z"
+      "lastSyncedUpdate": "2026-10-19T21:40:41.444Z"
     },
     "WWcwWEE2WDNUWGc0MFoxVg-V0hUWTdHSVF6VEZlaWl4Ng": {
       "accountAId": "WWcwWEE2WDNUWGc0MFoxVg",
@@ -25069,7 +25069,12 @@
       "accountAId": "czVyeld4QWVTRGFTLXdHbw",
       "accountBId": "azlpajBKeWpzb1NoU2ZkRA",
       "lastSyncedUpdate": "2026-10-19T09:14:31.243Z"
+    },
+    "VndtNl9PRmVGNGJvSDVBVg-UVljN1lMdlpwMksxYl9fMQ": {
+      "accountAId": "VndtNl9PRmVGNGJvSDVBVg",
+      "accountBId": "UVljN1lMdlpwMksxYl9fMQ",
+      "lastSyncedUpdate": "2026-10-19T23:09:26.483Z"
     }
   },
-  "lastSyncTime": "2026-10-19T21:40:52.211Z"
+  "lastSyncTime": "2026-10-20T00:41:39.035Z"
 }
